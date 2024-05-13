@@ -136,6 +136,7 @@ const Navbar = () => {
                                     </a>
                                 </li>
                                 <li className="sidebar-item">
+                                <NavLink to='/adduser'>
                                     <a
                                         className="sidebar-link"
                                         href="./authentication-register.html"
@@ -146,6 +147,7 @@ const Navbar = () => {
                                         </span>
                                         <span className="hide-menu">Register</span>
                                     </a>
+                                    </NavLink>
                                 </li>
                                 <li className="nav-small-cap">
                                     <i className="ti ti-dots nav-small-cap-icon fs-4" />

@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css';
 import Navbars from './components/Navbar'
 import Managecolor from './components/Managecolor';
+import Login from './components/Login';
+import Adduser from './components/Adduser';
 
 function App() {
   return (
@@ -17,14 +19,13 @@ function App() {
 
 
               <Route path='/managecolor' element={<Managecolor/>}></Route>
-
+              <Route path='/adduser' element={<Adduser/>}></Route>
 
 
 
             </Routes>
           </div>
         </div>
-
 
       </Router>
     </>
