@@ -10,6 +10,13 @@ import Chekemail from './components/Chekemail';
 import Verifyotp from './components/Verifyotp';
 import { useEffect, useState } from "react";
 import Forget from './components/Forget';
+// import ManageGrade from './components/ManageGrade';
+import NewOrder from './components/neworder';
+// import ManageShape from './components/ManageShape';
+// import ManageSize from './components/ManageSize';
+import DisplaySize from './components/displaysize';
+import ManageShape  from './components/displayShape';
+
 function App() {
   console.log("app");
 
@@ -77,6 +84,16 @@ function App() {
                 {chekadmin === 'yesthis' ? (<Route path='/adduser' element={<Adduser/>} />) : (<></>)}
                 
               <Route path='/managecolor' element={<Managecolor/>}></Route>
+
+              {/* <Route path='/managecolor' element={<Managecolor/>}></Route>
+              <Route path='/managegrade' element={<ManageGrade/>}></Route>
+              <Route path='/manageshape' element={<ManageShape/>}></Route>
+              <Route path='/managesize' element={<DisplaySize/>}></Route> */}
+              <Route path='/adduser' element={<Adduser/>}></Route>
+              <Route path='/neworder' element={<NewOrder/>}></Route>
+            
+
+
               
 
               </Routes>

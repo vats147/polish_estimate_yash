@@ -1,3 +1,4 @@
+
 {
   "name": "polish_estimate",
   "version": "0.1.0",
@@ -7,12 +8,17 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "ag-grid-community": "^31.3.1",
+    "ag-grid-react": "^31.3.1",
     "axios": "^1.6.8",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.2",
     "react-dom": "^18.3.1",
+    "react-flatpickr": "^3.10.13",
     "react-hook-form": "^7.51.4",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "reactjs-popup": "^2.0.6",
     "web-vitals": "^2.1.4",
