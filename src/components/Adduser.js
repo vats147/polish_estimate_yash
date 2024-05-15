@@ -1,7 +1,16 @@
 import React from 'react'
 import { ToastContainer, toast } from 'react-toastify';
-
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { useState } from 'react'
+import { useAuth } from './Auths';
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { adduserschema } from '../schema/adduser';
+import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css';
+
 const Adduser = () => {
 
     const buttonStyle = {
@@ -17,11 +26,45 @@ const Adduser = () => {
         marginBottom: '2rem',
         transition: '0.3s',
     };
-    const notify = (event) =>{
-        event.preventDefault();
-        toast("Wow so easy !");
-    } 
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+        resolver: yupResolver(adduserschema),
+        defaultValues: { name:'', phone:'', address:'' ,email: '', password: '' }
+    });
+
+
+    const onSubmit = (data,event)=>{
+        console.log(data);
+        
+        axios.post('http://localhost:8080/adduser', {
+            name:data.name,
+            number:data.phone,
+            Address:data.address,
+            email: data.email,
+            password: data.password,
+        }).then((res) => {
+
+            console.log("success", res.data[0]);
+
+
+            event.preventDefault();
+            toast.success("user add succesfull ");
+
+
+        }).catch((error) => {
+            console.log("error", error, "this is actch");
+
+            event.preventDefault();
+            toast.error("Please enter Valid username and password");
+
+        });
+    }
+
+
+   
     return (
+
+        
         <div className="container-fluid">
             <div className="container-fluid">
                 <div className="card">
@@ -29,7 +72,7 @@ const Adduser = () => {
                         <h5 className="card-title fw-semibold mb-4">Add user</h5>
                         <div className="card">
                             <div className="card-body">
-                                <form>
+                                <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label">
                                             Full Name
@@ -39,10 +82,12 @@ const Adduser = () => {
                                             className="form-control"
                                             id="exampleInputEmail1"
                                             aria-describedby="emailHelp"
+                                            name='name'
+                                            {...register('name')}
                                         />
-                                        <div id="emailHelp" className="form-text">
-                                            We'll never share your email with anyone else.
-                                        </div>
+                                        {errors.name && (<div id="emailHelp" style={{ color: 'red' }} className="form-text">
+                                                    {errors.name.message}
+                                                </div>)}
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label">
@@ -53,38 +98,44 @@ const Adduser = () => {
                                             className="form-control"
                                             id="exampleInputEmail1"
                                             aria-describedby="emailHelp"
+                                            name='email'
+                                            {...register('email')}
                                         />
-                                        <div id="emailHelp" className="form-text">
-                                            We'll never share your email with anyone else.
-                                        </div>
+                                        {errors.email && (<div id="emailHelp" style={{ color: 'red' }} className="form-text">
+                                                    {errors.email.message}
+                                                </div>)}
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label">
                                             Phone Number
                                         </label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             className="form-control"
                                             id="exampleInputEmail1"
                                             aria-describedby="emailHelp"
+                                            name='phone'
+                                            {...register('phone')}
                                         />
-                                        <div id="emailHelp" className="form-text">
-                                            We'll never share your email with anyone else.
-                                        </div>
+                                        {errors.phone && (<div id="emailHelp" style={{ color: 'red' }} className="form-text">
+                                                    {errors.phone.message}
+                                                </div>)}
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1" className="form-label">
                                             Address
                                         </label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             className="form-control"
                                             id="exampleInputEmail1"
                                             aria-describedby="emailHelp"
+                                            name='address'
+                                            {...register('address')}
                                         />
-                                        <div id="emailHelp" className="form-text">
-                                            We'll never share your email with anyone else.
-                                        </div>
+                                        {errors.address && (<div id="emailHelp" style={{ color: 'red' }} className="form-text">
+                                                    {errors.address.message}
+                                                </div>)}
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputPassword1" className="form-label">
@@ -94,10 +145,15 @@ const Adduser = () => {
                                             type="password"
                                             className="form-control"
                                             id="exampleInputPassword1"
+                                            name='password'
+                                            {...register('password')}
                                         />
+                                        {errors.password && (<div id="emailHelp" style={{ color: 'red' }} className="form-text">
+                                                    {errors.password.message}
+                                                </div>)}
                                     </div>
 
-                                    <button type="submit" style={buttonStyle} onClick={notify} className="btn btn-primary">
+                                    <button type="submit" style={buttonStyle}  className="btn btn-primary">
                                         Submit
                                     </button>
                                     <ToastContainer

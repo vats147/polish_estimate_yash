@@ -1,13 +1,13 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { color_name_schema } from '../schema/color'
+import { colorSchema} from '../schema/color'
 
 
 const Managecolor = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(color_name_schema),
+        resolver: yupResolver(colorSchema),
         defaultValues: { color_name: '' }
     });
     const onsubmit = (data) => {

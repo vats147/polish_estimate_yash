@@ -1,8 +1,20 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from './Auths';
 
-const Navbar = () => {
+const Navbar = ({ handellogout }) => {
+
+    const navigate = useNavigate();
+    const auth = useAuth();
+
+    const logout = () => {
+        auth.logout();
+        handellogout();
+        navigate('/login');
+    }
+
+
     return (
         <>
             {/*  Body Wrapper */}
@@ -58,30 +70,32 @@ const Navbar = () => {
                                     <span className="hide-menu">UI COMPONENTS</span>
                                 </li>
                                 <li className="sidebar-item">
-                                <NavLink to='/managecolor'>
-                                    <a
-                                        className="sidebar-link"
-                                        href="./ui-buttons.html"
-                                        aria-expanded="false"
-                                    >
-                                        <span>
-                                            <i className="ti ti-article" />
-                                        </span>
-                                        <span className="hide-menu">Color</span>
-                                    </a>
+                                    <NavLink to='/managecolor'>
+                                        <a
+                                            className="sidebar-link"
+                                            href="./ui-buttons.html"
+                                            aria-expanded="false"
+                                        >
+                                            <span>
+                                                <i className="ti ti-article" />
+                                            </span>
+                                            <span className="hide-menu">Color</span>
+                                        </a>
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <a
-                                        className="sidebar-link"
-                                        href="./ui-alerts.html"
-                                        aria-expanded="false"
-                                    >
-                                        <span>
-                                            <i className="ti ti-alert-circle" />
-                                        </span>
-                                        <span className="hide-menu">Alerts</span>
-                                    </a>
+                                    <NavLink to='/adduser'>
+                                        <a
+                                            className="sidebar-link"
+
+                                            aria-expanded="false"
+                                        >
+                                            <span>
+                                                <i className="ti ti-user" />
+                                            </span>
+                                            <span className="hide-menu">Alerts</span>
+                                        </a>
+                                    </NavLink>
                                 </li>
                                 <li className="sidebar-item">
                                     <a
@@ -136,17 +150,17 @@ const Navbar = () => {
                                     </a>
                                 </li>
                                 <li className="sidebar-item">
-                                <NavLink to='/adduser'>
-                                    <a
-                                        className="sidebar-link"
-                                        href="./authentication-register.html"
-                                        aria-expanded="false"
-                                    >
-                                        <span>
-                                            <i className="ti ti-user-plus" />
-                                        </span>
-                                        <span className="hide-menu">Register</span>
-                                    </a>
+                                    <NavLink to='/adduser'>
+                                        <a
+                                            className="sidebar-link"
+                                            href="./authentication-register.html"
+                                            aria-expanded="false"
+                                        >
+                                            <span>
+                                                <i className="ti ti-user-plus" />
+                                            </span>
+                                            <span className="hide-menu">Register</span>
+                                        </a>
                                     </NavLink>
                                 </li>
                                 <li className="nav-small-cap">
@@ -284,7 +298,7 @@ const Navbar = () => {
                                                     <p className="mb-0 fs-3">My Task</p>
                                                 </a>
                                                 <a
-                                                    href="./authentication-login.html"
+                                                    onClick={logout}
                                                     className="btn btn-outline-primary mx-3 mt-2 d-block"
                                                 >
                                                     Logout
