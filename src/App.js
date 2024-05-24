@@ -84,11 +84,6 @@ function App() {
                 {chekadmin === 'yesthis' ? (<Route path='/adduser' element={<Adduser/>} />) : (<></>)}
                 
               <Route path='/managecolor' element={<Managecolor/>}></Route>
-
-              {/* <Route path='/managecolor' element={<Managecolor/>}></Route>
-              <Route path='/managegrade' element={<ManageGrade/>}></Route>
-              <Route path='/manageshape' element={<ManageShape/>}></Route>
-              <Route path='/managesize' element={<DisplaySize/>}></Route> */}
               <Route path='/adduser' element={<Adduser/>}></Route>
               <Route path='/neworder' element={<NewOrder/>}></Route>
               <Route path="/displayorder" element={<DisplayOrder />}></Route>

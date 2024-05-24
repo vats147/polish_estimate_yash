@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from './Auths';
+
 
 const Navbar = ({ handellogout }) => {
 
@@ -14,16 +15,49 @@ const Navbar = ({ handellogout }) => {
         navigate('/login');
     }
 
+    const [sidebarType, setSidebarType] = useState('full');
+    const [isMiniSidebar, setIsMiniSidebar] = useState(false);
+
+    useEffect(() => {
+        const updateSidebarType = () => {
+            const width = window.innerWidth > 0 ? window.innerWidth : window.screen.width;
+            if (width < 1199) {
+                setSidebarType('mini-sidebar');
+                setIsMiniSidebar(true);
+            } else {
+                setSidebarType('full');
+                setIsMiniSidebar(false);
+            }
+        };
+
+        // Initial setting
+        updateSidebarType();
+
+        // Attach resize listener
+        window.addEventListener('resize', updateSidebarType);
+
+        // Cleanup listener on component unmount
+        return () => {
+            window.removeEventListener('resize', updateSidebarType);
+        };
+    }, []);
+
+    const toggleSidebar = () => {
+        const newSidebarType = isMiniSidebar ? 'full' : 'mini-sidebar';
+        setIsMiniSidebar(!isMiniSidebar);
+        setSidebarType(newSidebarType);
+    };
+
 
     return (
         <>
             {/*  Body Wrapper */}
             <div
-                className="page-wrapper"
                 id="main-wrapper"
+                className={`page-wrapper ${isMiniSidebar ? 'mini-sidebar show-sidebar' : ''}`}
                 data-layout="vertical"
                 data-navbarbg="skin6"
-                data-sidebartype="full"
+                data-sidebartype={sidebarType}
                 data-sidebar-position="fixed"
                 data-header-position="fixed"
             >
@@ -39,12 +73,16 @@ const Navbar = ({ handellogout }) => {
                                     alt=""
                                 />
                             </a>
-                            <div
-                                className="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
-                                id="sidebarCollapse"
-                            >
-                                <i className="ti ti-x fs-8" />
-                            </div>
+                            
+                                <div
+                                onClick={toggleSidebar}
+                                    className="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
+                                    id="sidebarCollapse"
+                                >
+                                    <i className="ti ti-x fs-8" />
+                                </div>
+                           
+
                         </div>
                         {/* Sidebar navigation*/}
                         <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
@@ -98,7 +136,7 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                <NavLink to='/displayorder'>
+                                    <NavLink to='/displayorder'>
                                         <a
                                             className="sidebar-link"
 
@@ -112,7 +150,7 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                <NavLink to='/finalorder'>
+                                    <NavLink to='/finalorder'>
                                         <a
                                             className="sidebar-link"
 
@@ -232,13 +270,19 @@ const Navbar = ({ handellogout }) => {
                         <nav className="navbar navbar-expand-lg navbar-light">
                             <ul className="navbar-nav">
                                 <li className="nav-item d-block d-xl-none">
+
                                     <a
                                         className="nav-link sidebartoggler nav-icon-hover"
                                         id="headerCollapse"
                                         href="javascript:void(0)"
+                                        onClick={toggleSidebar}
                                     >
                                         <i className="ti ti-menu-2" />
                                     </a>
+
+
+
+
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link nav-icon-hover" href="javascript:void(0)">

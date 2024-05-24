@@ -812,6 +812,13 @@ const ManageOrder = () => {
     }),
   };
 
+  const customStyles1 = {
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999, // Ensure dropdown is above other elements
+    }),
+  };
+
   const filteredSizeOptions = sizeOptions.filter(
     (option) => !selectedSizes.includes(option.value)
   );
@@ -1300,261 +1307,184 @@ const ManageOrder = () => {
                         <Row>
                           <Col>
                             <Form>
-                              <div className="table-responsive">
-                                <table className="table table-borderless table-centered mb-0">
-                                  <thead className="table-light">
-                                    <tr>
-                                      <th>Size</th>
-                                      <th>Grade</th>
-                                      <th>CT</th>
-                                      <th>RS</th>
-                                      <th>Amount</th>
-                                      <th>Average</th>
-                                      <th></th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {sections.map((section, sectionIndex) => (
-                                      <React.Fragment key={sectionIndex}>
-                                        <tr>
-                                          <td>
-                                            <Controller
-                                              name={`sections[${sectionIndex}].size`}
-                                              control={control}
-                                              render={({ field }) => (
-                                                <Select
-                                                  {...field}
-                                                  options={sizeOptions}
-                                                  value={sizeOptions.find(
-                                                    (option) =>
-                                                      option.value ===
-                                                      field.value
-                                                  )}
-                                                  onChange={(
-                                                    selectedOption
-                                                  ) => {
-                                                    field.onChange(
-                                                      selectedOption.value
-                                                    );
-                                                    handleSizeSelect(
-                                                      selectedOption,
-                                                      sectionIndex
-                                                    );
-                                                    setValue(
-                                                      `sections[${sectionIndex}].size`,
-                                                      selectedOption
-                                                        ? selectedOption.label
-                                                        : ""
-                                                    );
-                                                  }}
-                                                  className="select bg-light"
-                                                  classNamePrefix="select"
-                                                />
-                                              )}
-                                            />
-                                          </td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td>
-                                            <Button
-                                              variant="danger"
-                                              onClick={() =>
-                                                removeSection(sectionIndex)
-                                              }
-                                            >
-                                              Remove Section
-                                            </Button>
-                                          </td>
-                                        </tr>
-                                        {section.rows.map((row, rowIndex) => (
-                                          <tr key={rowIndex}>
-                                            <td></td>
-                                            <td>
-                                              <Controller
-                                                name={`sections[${sectionIndex}].rows[${rowIndex}].grade`}
-                                                control={control}
-                                                render={({ field }) => (
-                                                  <Select
-                                                    {...field}
-                                                    options={gradeOptions.filter(
-                                                      (option) =>
-                                                        !section.selectedGrades.includes(
-                                                          option.value
-                                                        )
-                                                    )}
-                                                    onChange={(
-                                                      selectedOption
-                                                    ) => {
-                                                      field.onChange(
-                                                        selectedOption
-                                                          ? selectedOption.value
-                                                          : ""
-                                                      ); // Trigger the field's onChange
-                                                      handleRowChange(
-                                                        sectionIndex,
-                                                        rowIndex,
-                                                        "grade",
-                                                        selectedOption
-                                                          ? selectedOption.value
-                                                          : ""
-                                                      ); // Handle additional change logic
-                                                    }}
-                                                    className="select bg-light"
-                                                    classNamePrefix="select"
-                                                    value={
-                                                      gradeOptions.find(
-                                                        (option) =>
-                                                          option.value ===
-                                                          field.value
-                                                      ) || null
-                                                    } // Ensure value is correctly set
-                                                  />
-                                                )}
-                                              />
-                                            </td>
-                                            <td>
-                                              <Controller
-                                                name={`sections[${sectionIndex}].rows[${rowIndex}].ct`}
-                                                control={control}
-                                                rules={{ required: true }}
-                                                render={({ field }) => (
-                                                  <input
-                                                    type="number"
-                                                    className="form-control bg-light"
-                                                    placeholder="CT"
-                                                    {...field}
-                                                    onChange={(e) => {
-                                                      field.onChange(
-                                                        e.target.value
-                                                      ); // Update the form state
-                                                      handleRowChange(
-                                                        sectionIndex,
-                                                        rowIndex,
-                                                        "ct",
-                                                        e.target.value
-                                                      ); // Call your custom change handler
-                                                    }}
-                                                  />
-                                                )}
-                                              />
-                                            </td>
-                                            <td>
-                                              <Controller
-                                                name={`sections[${sectionIndex}].rows[${rowIndex}].rs`}
-                                                control={control}
-                                                rules={{ required: true }}
-                                                render={({ field }) => (
-                                                  <input
-                                                    type="number"
-                                                    className="form-control bg-light"
-                                                    placeholder="RS"
-                                                    {...field}
-                                                    onChange={(e) => {
-                                                      field.onChange(
-                                                        e.target.value
-                                                      ); // Update the form state
-                                                      handleRowChange(
-                                                        sectionIndex,
-                                                        rowIndex,
-                                                        "rs",
-                                                        e.target.value
-                                                      ); // Call your custom change handler
-                                                    }}
-                                                  />
-                                                )}
-                                              />
-                                            </td>
-                                            <td>
-                                              <Controller
-                                                name={`sections[${sectionIndex}].rows[${rowIndex}].amount`}
-                                                control={control}
-                                                render={({ field }) => (
-                                                  <input
-                                                    type="number"
-                                                    {...field}
-                                                    className="form-control bg-light"
-                                                    placeholder="Amount"
-                                                    onChange={(e) => {
-                                                      field.onChange(
-                                                        e.target.value
-                                                      ); // Update form state
-                                                      handleRowChange(
-                                                        sectionIndex,
-                                                        rowIndex,
-                                                        "amount",
-                                                        e.target.value
-                                                      ); // Custom handler
-                                                    }}
-                                                    readOnly
-                                                  />
-                                                )}
-                                              />
-                                            </td>
-                                            {rowIndex === 0 && (
-                                              <td rowSpan={section.rows.length}>
-                                                <Controller
-                                                  name={`sections[${sectionIndex}].rows[${rowIndex}].average`}
-                                                  control={control}
-                                                  render={({ field }) => (
-                                                    <input
-                                                      type="number"
-                                                      className="form-control bg-light"
-                                                      placeholder="Average"
-                                                      {...field}
-                                                      value={field.value || ""}
-                                                      readOnly
-                                                    />
-                                                  )}
-                                                />
-                                              </td>
-                                            )}
-                                            <td>
-                                              <Button
-                                                variant="danger"
-                                                onClick={() =>
-                                                  removeRow(
-                                                    sectionIndex,
-                                                    rowIndex
-                                                  )
-                                                }
-                                              >
-                                                Remove Row
-                                              </Button>
-                                            </td>
-                                          </tr>
-                                        ))}
-                                        <tr>
-                                          <td
-                                            colSpan="7"
-                                            className="border-bottom border-bottom-dashed"
-                                          >
-                                            <Button
-                                              variant="success"
-                                              onClick={() =>
-                                                addRow(sectionIndex)
-                                              }
-                                            >
-                                              Add Row
-                                            </Button>
-                                          </td>
-                                        </tr>
-                                      </React.Fragment>
-                                    ))}
-                                    <tr>
-                                      <td colSpan="7">
-                                        <Button
-                                          variant="primary"
-                                          onClick={addSection}
-                                        >
-                                          Add Section
-                                        </Button>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                              
+                              <table className="table table-borderless table-centered mb-0">
+        <thead className="table-light">
+          <tr>
+            <th>Size</th>
+            <th>Grade</th>
+            <th>CT</th>
+            <th>RS</th>
+            <th>Amount</th>
+            <th>Average</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {sections.map((section, sectionIndex) => (
+            <React.Fragment key={sectionIndex}>
+              <tr>
+                <td>
+                  <Controller
+                    name={`sections[${sectionIndex}].size`}
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={sizeOptions}
+                        value={sizeOptions.find((option) => option.value === field.value)}
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption.value);
+                          handleSizeSelect(selectedOption, sectionIndex);
+                          setValue(`sections[${sectionIndex}].size`, selectedOption ? selectedOption.label : "");
+                        }}
+                        className="select bg-light"
+                        classNamePrefix="select"
+                        styles={customStyles1}
+                        menuPortalTarget={document.body}
+                      />
+                    )}
+                  />
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <Button variant="danger" onClick={() => removeSection(sectionIndex)}>
+                    Remove Section
+                  </Button>
+                </td>
+              </tr>
+              {section.rows.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td></td>
+                  <td>
+                    <Controller
+                      name={`sections[${sectionIndex}].rows[${rowIndex}].grade`}
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          options={gradeOptions.filter((option) => !section.selectedGrades.includes(option.value))}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption ? selectedOption.value : ""); // Trigger the field's onChange
+                            handleRowChange(sectionIndex, rowIndex, "grade", selectedOption ? selectedOption.value : ""); // Handle additional change logic
+                          }}
+                          className="select bg-light"
+                          classNamePrefix="select"
+                          styles={customStyles1}
+                          menuPortalTarget={document.body}
+                          value={gradeOptions.find((option) => option.value === field.value) || null} // Ensure value is correctly set
+                        />
+                      )}
+                    />
+                  </td>
+                  <td>
+                    <Controller
+                      name={`sections[${sectionIndex}].rows[${rowIndex}].ct`}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <input
+                          type="number"
+                          className="form-control bg-light"
+                          placeholder="CT"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e.target.value); // Update the form state
+                            handleRowChange(sectionIndex, rowIndex, "ct", e.target.value); // Call your custom change handler
+                          }}
+                        />
+                      )}
+                    />
+                  </td>
+                  <td>
+                    <Controller
+                      name={`sections[${sectionIndex}].rows[${rowIndex}].rs`}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <input
+                          type="number"
+                          className="form-control bg-light"
+                          placeholder="RS"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e.target.value); // Update the form state
+                            handleRowChange(sectionIndex, rowIndex, "rs", e.target.value); // Call your custom change handler
+                          }}
+                        />
+                      )}
+                    />
+                  </td>
+                  <td>
+                    <Controller
+                      name={`sections[${sectionIndex}].rows[${rowIndex}].amount`}
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          type="number"
+                          {...field}
+                          className="form-control bg-light"
+                          placeholder="Amount"
+                          onChange={(e) => {
+                            field.onChange(e.target.value); // Update form state
+                            handleRowChange(sectionIndex, rowIndex, "amount", e.target.value); // Custom handler
+                          }}
+                          readOnly
+                        />
+                      )}
+                    />
+                  </td>
+                  {rowIndex === 0 && (
+                    <td rowSpan={section.rows.length}>
+                      <Controller
+                        name={`sections[${sectionIndex}].rows[${rowIndex}].average`}
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            type="number"
+                            className="form-control bg-light"
+                            placeholder="Average"
+                            {...field}
+                            value={field.value || ""}
+                            readOnly
+                          />
+                        )}
+                      />
+                    </td>
+                  )}
+                  <td>
+                    <Button variant="danger" onClick={() => removeRow(sectionIndex, rowIndex)}>
+                      Remove Row
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td colSpan="7" className="border-bottom border-bottom-dashed">
+                  <Button variant="success" onClick={() => addRow(sectionIndex)}>
+                    Add Row
+                  </Button>
+                </td>
+              </tr>
+            </React.Fragment>
+          ))}
+          <tr>
+            <td colSpan="7">
+              <Button variant="primary" onClick={addSection}>
+                Add Section
+              </Button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div style={{ display: "flex" }}>
+        <table className="table table-borderless table-centered mb-0" style={{ marginLeft: "auto" }}>
+          
+        </table>
                               </div>
                             </Form>
                           </Col>
