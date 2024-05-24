@@ -4,11 +4,12 @@ import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useForm, Controller, useFieldArray } from 'react-hook-form';
-import './tbl.css'
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import './tbl.css';
 
 const ManageOrder = () => {
-  const { register, handleSubmit, setValue, watch, control, getValues } = useForm();
+  const { register, handleSubmit, setValue, watch, control, getValues } =
+    useForm();
 
   const [colorOptions, setColorOptions] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
@@ -19,8 +20,8 @@ const ManageOrder = () => {
   const [msize, setmsize] = useState([]);
   const [rmsize, setrmsize] = useState([]);
   const [sizeOptions1, setsizeOptions1] = useState([]);
-  // const sizeOptions1 = ["Small", "Medium", "Large"];
 
+  // const sizeOptions1 = ["Small", "Medium", "Large"];
 
   const [sections, setSections] = useState([
     {
@@ -30,7 +31,8 @@ const ManageOrder = () => {
       rows: [{ grade: "", ct: "", rs: "", amount: "", average: "" }],
       selectedGrades: [], // Track selected grades for each section
     },
-  ]); const [formData, setFormData] = useState({
+  ]);
+  const [formData, setFormData] = useState({
     orderId: "",
     partyName: "",
     brokerName: "",
@@ -46,10 +48,10 @@ const ManageOrder = () => {
     remarks: "",
   });
 
-
   useEffect(() => {
     // Fetch data for size and grade options
-    axios.get("http://localhost:8080/getallsizes")
+    axios
+      .get("http://localhost:8080/getallsizes")
       .then((response) => {
         const sizes = response.data.data.map((size) => ({
           value: size.size_id,
@@ -59,24 +61,56 @@ const ManageOrder = () => {
           value: size.size_name,
           label: size.size_name,
         }));
+
         setSizeOptions(sizes);
         setInitialSizeOptions(sizes);
-        setsizeOptions1(sizes1); // Store initial size options
+        setsizeOptions1(sizes1); 
+        // Store initial size options
       })
       .catch((error) => {
         console.error("There was an error fetching the sizes!", error);
       });
 
-    axios.get("http://localhost:8080/getallgrade")
+    axios
+      .get("http://localhost:8080/getallgrade")
       .then((response) => {
         const options = response.data.data.map((grade) => ({
           value: grade.grade_name,
           label: grade.grade_name,
         }));
+
         setGradeOptions(options);
       })
       .catch((error) => {
         console.error("Error fetching grade options:", error);
+      });
+
+    // Fetch data for color options
+    axios
+      .get("http://localhost:8080/getallcolor")
+      .then((response) => {
+        const colors = response.data.data.map((color) => ({
+          value: color.color_id,
+          label: color.color_name,
+        }));
+        setColorOptions(colors);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the colors!", error);
+      });
+
+    // Fetch data for shape options
+    axios
+      .get("http://localhost:8080/getallshape")
+      .then((response) => {
+        const shapes = response.data.data.map((shape) => ({
+          value: shape.shape_id,
+          label: shape.shape_name,
+        }));
+        setShapeOptions(shapes);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the shapes!", error);
       });
   }, []);
 
@@ -94,7 +128,9 @@ const ManageOrder = () => {
     if (field === "grade") {
       const prevGrade = currentRow.grade;
       if (prevGrade) {
-        currentSection.selectedGrades = currentSection.selectedGrades.filter(g => g !== prevGrade);
+        currentSection.selectedGrades = currentSection.selectedGrades.filter(
+          (g) => g !== prevGrade
+        );
       }
       if (value) {
         currentSection.selectedGrades.push(value);
@@ -104,13 +140,14 @@ const ManageOrder = () => {
     currentRow[field] = value;
 
     if (field === "ct" || field === "rs") {
-      currentRow.amount = (parseFloat(currentRow.ct || 0) * parseFloat(currentRow.rs || 0)).toFixed(2);
+      currentRow.amount = (
+        parseFloat(currentRow.ct || 0) * parseFloat(currentRow.rs || 0)
+      ).toFixed(2);
       currentSection.totalAmount = calculateTotalAmount(currentSection);
 
       console.log("==", currentSection);
       console.log("CT", calculateTotalCT(currentSection));
       console.log("Total Amount", currentSection.totalAmount);
-
 
       const totalCT = calculateTotalCT(currentSection);
       console.log("CT CT", totalCT);
@@ -118,10 +155,14 @@ const ManageOrder = () => {
         parseFloat(currentSection.totalAmount) / totalCT
       ).toFixed(2);
 
-
-
-      setValue(`sections[${sectionIndex}].rows[${rowIndex}].amount`, currentRow.amount);
-      console.log(`sections[${sectionIndex}].rows[${rowIndex}].average`, currentRow.average);
+      setValue(
+        `sections[${sectionIndex}].rows[${rowIndex}].amount`,
+        currentRow.amount
+      );
+      console.log(
+        `sections[${sectionIndex}].rows[${rowIndex}].average`,
+        currentRow.average
+      );
       setValue(`sections[${sectionIndex}].rows[0].average`, currentRow.average);
     }
 
@@ -142,7 +183,9 @@ const ManageOrder = () => {
       amount: "",
       average: "",
     });
-    updatedSections[sectionIndex].totalAmount = calculateTotalAmount(updatedSections[sectionIndex]);
+    updatedSections[sectionIndex].totalAmount = calculateTotalAmount(
+      updatedSections[sectionIndex]
+    );
     setSections(updatedSections);
   };
 
@@ -177,16 +220,15 @@ const ManageOrder = () => {
   //   return totalCT.toFixed(2);
   // };
 
-
   const calculateTotalCT = (section) => {
     let totalCT = 0;
     console.log("fun", section);
     if (section.rows) {
       for (const row of section.rows) {
         if (section.rows.length > 0) {
-          console.log("-----", row)
+          console.log("-----", row);
           totalCT += parseFloat(row.ct || 0);
-          console.log("infor= ct", totalCT)
+          console.log("infor= ct", totalCT);
         }
       }
     }
@@ -194,15 +236,24 @@ const ManageOrder = () => {
     return totalCT.toFixed(2);
   };
 
-
   const updateTotalCT = (value) => {
     document.getElementById("cart-ct").value = value;
-    setValue('Sample Weight', value);
+    setValue("Sample Weight", value);
+
+    let grandtotal=document.getElementById("cart-grandtotal").value? document.getElementById("cart-grandtotal").value: 1;
+    document.getElementById('total-avg').value= (parseFloat(grandtotal) / parseFloat(value)).toFixed(2);
+    
+    setValue("TotalAverage",document.getElementById('total-avg').value)
   };
 
   const updateGrandTotal = (value) => {
     document.getElementById("cart-grandtotal").value = value;
-    setValue('GrandTotal', value);
+    setValue("GrandTotal", value);
+
+    let totalct=document.getElementById("cart-ct").value = value? document.getElementById("cart-ct").value = value: 1;
+    document.getElementById('total-avg').value= (parseFloat(value) / parseFloat(totalct)).toFixed(2);
+    
+    setValue("TotalAverage",document.getElementById('total-avg').value)
   };
 
   let updatedMSize;
@@ -211,10 +262,8 @@ const ManageOrder = () => {
 
     console.log(msize.length);
 
-
     // Find the index of the item in msize if it exists
     const msizeIndex = msize.findIndex((size) => size.section === sectionIndex);
-
 
     if (msizeIndex !== -1) {
       console.log("okoko");
@@ -233,19 +282,19 @@ const ManageOrder = () => {
       const uniqueFromInitialSizeOptions = [];
       initialSizeOptions.forEach((inisize) => {
         // Check if the inisize value exists in updatedMSize
-        const existsInUpdated = updatedMSize.some((size) => size.value === inisize.value);
+        const existsInUpdated = updatedMSize.some(
+          (size) => size.value === inisize.value
+        );
         // If the inisize value doesn't exist in updatedMSize, add it to uniqueFromInitialSizeOptions
         if (!existsInUpdated) {
           uniqueFromInitialSizeOptions.push(inisize);
         }
       });
 
-
       // Print unique items from initialSizeOptions
       console.log("Unique items from initialSizeOptions:");
       console.log(uniqueFromInitialSizeOptions);
       setSizeOptions(uniqueFromInitialSizeOptions);
-
     } else {
       // Add the new item to msize
       setmsize([
@@ -263,7 +312,8 @@ const ManageOrder = () => {
           value: selectedOption.value,
           label: selectedOption.label,
           section: sectionIndex,
-        }];
+        },
+      ];
       console.log(updatedMSize);
 
       console.log("mm=", msize);
@@ -272,14 +322,7 @@ const ManageOrder = () => {
       );
       setSizeOptions(updatedSizeOptions);
       setrmsize(updatedMSize);
-
     }
-
-
-
-
-
-
   };
 
   const removeRow = (sectionIndex, rowIndex) => {
@@ -304,7 +347,9 @@ const ManageOrder = () => {
 
     // Update selectedGrades if a grade was removed
     if (removedGrade) {
-      section.selectedGrades = section.selectedGrades.filter(g => g !== removedGrade);
+      section.selectedGrades = section.selectedGrades.filter(
+        (g) => g !== removedGrade
+      );
     }
 
     // Update the section's total amounts
@@ -317,20 +362,15 @@ const ManageOrder = () => {
     const grandTotal = calculateGrandTotal(updatedSections);
     updateGrandTotal(grandTotal);
 
-
     updateTotalCT(section.totalCT);
 
-
-
     console.log("CT CT", section.totalCT);
-    let average = (
-      parseFloat(section.totalAmount) / section.totalCT
-    ).toFixed(2);
-
-
+    let average = (parseFloat(section.totalAmount) / section.totalCT).toFixed(
+      2
+    );
 
     // Update form values
-    const sections1 = getValues('sections');
+    const sections1 = getValues("sections");
 
     // Check if sections1 exists and the sectionIndex is valid
     if (!sections1 || sectionIndex < 0 || sectionIndex >= sections1.length) {
@@ -342,7 +382,10 @@ const ManageOrder = () => {
 
     // Check if the rows array exists
     if (!currentSection.rows) {
-      console.error("Rows array is undefined in form values for section:", sectionIndex);
+      console.error(
+        "Rows array is undefined in form values for section:",
+        sectionIndex
+      );
       return;
     }
 
@@ -350,10 +393,12 @@ const ManageOrder = () => {
     currentSection.totalAmount = calculateTotalAmount(currentSection);
 
     setValue(`sections[${sectionIndex}].rows`, currentSection.rows);
-    setValue(`sections[${sectionIndex}].totalAmount`, currentSection.totalAmount);
+    setValue(
+      `sections[${sectionIndex}].totalAmount`,
+      currentSection.totalAmount
+    );
     console.log(average);
     setValue(`sections[${sectionIndex}].rows[0].average`, average);
-
   };
 
   const addSection = () => {
@@ -370,17 +415,23 @@ const ManageOrder = () => {
   };
   const removeSection = (sectionIndex) => {
     // Filter out the section to be removed
-    const updatedSections = sections.filter((_, index) => index !== sectionIndex);
+    const updatedSections = sections.filter(
+      (_, index) => index !== sectionIndex
+    );
     setSections(updatedSections);
 
     console.log("upppp", rmsize);
-    const updatedMSizesec = (rmsize ?? []).filter((item) => item.section !== sectionIndex);
+    const updatedMSizesec = (rmsize ?? []).filter(
+      (item) => item.section !== sectionIndex
+    );
     console.log("====", updatedMSizesec);
 
     const uniqueFromInitialSizeOptions = [];
     initialSizeOptions.forEach((inisize) => {
       // Check if the inisize value exists in updatedMSizesec
-      const existsInUpdated = updatedMSizesec.some((size) => size.value === inisize.value);
+      const existsInUpdated = updatedMSizesec.some(
+        (size) => size.value === inisize.value
+      );
       // If the inisize value doesn't exist in updatedMSizesec, add it to uniqueFromInitialSizeOptions
       if (!existsInUpdated) {
         uniqueFromInitialSizeOptions.push(inisize);
@@ -393,12 +444,12 @@ const ManageOrder = () => {
     setSizeOptions(uniqueFromInitialSizeOptions);
 
     // Update form values
-    const sectionsForm = getValues('sections');
+    const sectionsForm = getValues("sections");
 
     // Ensure the sectionIndex is within bounds
     if (sectionIndex >= 0 && sectionIndex < sectionsForm.length) {
       sectionsForm.splice(sectionIndex, 1);
-      setValue('sections', sectionsForm);
+      setValue("sections", sectionsForm);
     } else {
       console.error("Invalid section index:", sectionIndex);
       return;
@@ -419,19 +470,146 @@ const ManageOrder = () => {
     updateTotalCT(totalCT);
   };
 
-
   const onSubmit = (data) => {
     console.log("data", data); // Access the form data here
+
+    let submitdata = transformDataForBackend(data);
+    console.log(submitdata);
+
+    axios.post("http://localhost:8080/addorder", submitdata).then((response) => {
+        console.log(response);
+        if (response.data.success ) {
+            toast.success("Invoice added successfully!");
+            // wait for 3 second then redirect to the displayorder page
+            setTimeout(() => {
+
+                window.location.href = "/displayorder";
+            }, 3000);
+
+            // reset the form 
+            document.getElementById("invoice_form").reset();
+        } else {
+            toast.error("Failed to add invoice!");
+        }
+        }
+    ).catch((error) => {
+        console.error("Error adding invoice:", error);
+        toast.error("Failed to add invoice!");
+    }
+    );
+
   };
 
   const handlePrintFormData = () => {
     console.log("data");
     console.log(watch());
+ 
+
+   
+    let data = watch();
+    console.log(data);
+
+    
+    
+    
+
+
+
   };
+  const transformDataForBackend = (frontendData) => {
+    // Helper function to check if a value is valid
+    const isValidValue = (value) => {
+      return value !== undefined && value !== null && value !== "";
+    };
+  
+    // Transform sections and rows
+    const transformSections = (sections) => {
+      return sections.map(section => ({
+        size: section.size || "", // Assuming size ID maps to size name directly
+        row: section.rows
+          .filter(row => isValidValue(row.grade) && isValidValue(row.ct) && isValidValue(row.rs) && isValidValue(row.amount)) // Filter out rows with missing values
+          .map(row => ({
+            grade: row.grade || "", // Assuming grade ID maps to grade name directly
+            ct: parseFloat(row.ct) || 0, // Default to 0 if value is missing or invalid
+            rs: parseFloat(row.rs) || 0,
+            amount: parseFloat(row.amount) || 0,
+            av: row.average ? row.average  : 0 // Assuming 'average' field indicates availability
+          }))
+      }));
+    };
+  
+    // Transform fullPackage (rows in frontend)
+    const transformFullPackage = (rows) => {
+      return rows
+        .filter(row => isValidValue(row.size) && isValidValue(row.width) && isValidValue(row.percentage)) // Filter out rows with missing values
+        .map(row => ({
+          size: row.size || "", // Assuming size ID maps to size name directly
+          weight: parseFloat(row.width) || 0, // Default to 0 if value is missing or invalid
+          percentage: parseFloat(row.percentage) || 0
+        }));
+    };
+  
+    // Transform remaining fields with validation and default values
+    const partyName = isValidValue(frontendData.partyname) ? frontendData.partyname : "";
+    const brokerName = isValidValue(frontendData.brokername) ? frontendData.brokername : "";
+    const packageWeight = parseFloat(frontendData.PackageWeight) || 0;
+    const sellLimit = parseFloat(frontendData.sellLimit) || 0;
+    const sampleWeight = parseFloat(frontendData["Sample Weight"]) || 0;
+    const colorName = frontendData.Color || "";
+    const shapeName = frontendData.Shape || "";
+    const outPercentage = parseFloat(frontendData.OutPercentage) || 0;
+    const outWeight = parseFloat(frontendData.outWeight) || 0;
+    const finalPurchaseWeight = parseFloat(frontendData.finalPurchaseWeight) || 0;
+    const remarks = frontendData.remark || "";
+    const outRemarks = frontendData.lastremark || "";
+    const seal = [parseInt(frontendData.Seal1) || 0, parseInt(frontendData.Seal2) || 0];
+    const discount1Amount = parseFloat(frontendData.discountamount1) || 0;
+    const discount1percentage = frontendData["Discount 1"] ? parseFloat(parseFloat(frontendData["Discount 1"].label) *parseFloat(-1)).toFixed(2) : "";
+    const discount2Amount = parseFloat(frontendData.discountamount2) || 0;
+    const discount2percentage = frontendData["Discount 2"] ? parseFloat(parseFloat(frontendData["Discount 2"].label) *parseFloat(-1)).toFixed(2) : "";
+    const costPrice = parseFloat(frontendData.GrandTotal) || 0;
+    const finalPrice = costPrice - discount1Amount - discount2Amount;
+    const averageTotal = parseFloat(frontendData.TotalAverage) || 0;
+    const datetime = new Date().toISOString(); // Assuming current date and time
+    const createdBy = "currentUser"; // Replace with actual user info
+    const modifiedBy = "currentUser"; // Replace with actual user info
+    const createdDateTime = new Date().toISOString();
+    const lastModifiedDateTime = new Date().toISOString();
+  
+    return {
+      partyName,
+      brokerName,
+      packageWeight,
+      sellLimit,
+      sampleWeight,
+      colorName,
+      shapeName,
+      outPercentage,
+      outWeight,
+      finalPurchaseWeight,
+      remarks,
+      outRemarks,
+      section: transformSections(frontendData.sections || []),
+      fullPackate: transformFullPackage(frontendData.rows || []),
+      seal,
+      averageTotal,
+      discount1Amount,
+      discount1percentage,
+      discount2Amount,
+      discount2percentage,
+      costPrice,
+      finalPrice,
+      datetime,
+      createdBy,
+      modifiedBy,
+      createdDateTime,
+      lastModifiedDateTime
+    };
+  };
+  
 
-
-  // akhu packet 
-  const [rows, setRows] = useState([{ size: '', width: '', percentage: '' }]);
+  // akhu packet
+  const [rows, setRows] = useState([{ size: "", width: "", percentage: "" }]);
   const [showTable, setShowTable] = useState(false);
   const [selectedSizes1, setSelectedSizes1] = useState([]);
 
@@ -443,23 +621,23 @@ const ManageOrder = () => {
   // ];
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'rows',
+    name: "rows",
   });
 
   // Define your size options here
 
   const addRow1 = () => {
     if (fields.length < 5) {
-      append({ size: '', width: '', percentage: '' });
+      append({ size: "", width: "", percentage: "" });
     }
   };
 
-  const removeRow1 = index => {
+  const removeRow1 = (index) => {
     const removedSize = getValues(`rows[${index}].size`);
     remove(index);
     if (removedSize) {
-      setSelectedSizes1(prevSelectedSizes1 =>
-        prevSelectedSizes1.filter(size => size !== removedSize)
+      setSelectedSizes1((prevSelectedSizes1) =>
+        prevSelectedSizes1.filter((size) => size !== removedSize)
       );
     }
   };
@@ -470,8 +648,8 @@ const ManageOrder = () => {
     );
     setValue(`rows[${index}][${field}]`, value);
 
-    if (field === 'size') {
-      setSelectedSizes1(prevSelectedSizes1 => {
+    if (field === "size") {
+      setSelectedSizes1((prevSelectedSizes1) => {
         const newSelectedSizes1 = [...prevSelectedSizes1];
         const prevValue = watch(`rows[${index}].size`);
         if (prevValue) {
@@ -487,40 +665,37 @@ const ManageOrder = () => {
       });
     }
 
-
     if (field === "width") {
       const weight = parseFloat(value) || 0;
       console.log("Weight ", weight);
 
       // console.log("Percentage ", ((weight / sellLimit) * 100).toFixed(2))
       let newPackgeWeight = packageWeight ? packageWeight : 0;
-      updatedRows[index]['percentage'] = ((weight / newPackgeWeight) * 100).toFixed(2);
-      setValue(`rows[${index}].percentage`, updatedRows[index]['percentage']);
+      updatedRows[index]["percentage"] = (
+        (weight / newPackgeWeight) *
+        100
+      ).toFixed(2);
+      setValue(`rows[${index}].percentage`, updatedRows[index]["percentage"]);
     }
-
-
-
-
   };
-
 
   const toggleTable = () => {
     setShowTable(!showTable);
   };
 
-
   const getFilteredOptions = (currentSize) => {
-    const filtered = sizeOptions1.filter(option => !selectedSizes1.includes(option.value));
+    const filtered = sizeOptions1.filter(
+      (option) => !selectedSizes1.includes(option.value)
+    );
     if (currentSize) {
-      filtered.push(sizeOptions1.find(option => option.value === currentSize));
+      filtered.push(
+        sizeOptions1.find((option) => option.value === currentSize)
+      );
     }
     return filtered;
   };
 
-
-
-
-  // discount code 
+  // discount code
   const [discountData, setDiscountData] = useState({
     discount1: "",
     discount1Amount: "",
@@ -549,12 +724,11 @@ const ManageOrder = () => {
 
     if (discountAmount1Element) {
       discountAmount1Element.value = calculatedDiscount1Amount;
-      setValue('discountamount1', calculatedDiscount1Amount);
-
+      setValue("discountamount1", calculatedDiscount1Amount);
     }
     if (discountAmount2Element) {
       discountAmount2Element.value = calculatedDiscount2Amount;
-      setValue('discountamount2', calculatedDiscount2Amount);
+      setValue("discountamount2", calculatedDiscount2Amount);
     }
 
     console.log("Discount 1 calculated:", calculatedDiscount1Amount);
@@ -586,12 +760,11 @@ const ManageOrder = () => {
     const sellLimit = event.target.value;
     const discount1 = discountData.discount1;
     const discount2 = discountData.discount2;
-    setValue('sellLimit', sellLimit);
+    setValue("sellLimit", sellLimit);
     calculateDiscountAmount(sellLimit, discount1, discount2);
   };
 
-
-  //out 
+  //out
   const [packageWeight, setPackageWeight] = useState("");
   const [outPercentage, setOutPercentage] = useState("");
   const [outWeight, setOutWeight] = useState(0);
@@ -611,26 +784,27 @@ const ManageOrder = () => {
     const value = e.target.value;
     if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
       setPackageWeight(value);
-      setValue('PackageWeight', value);
+      setValue("PackageWeight", value);
     }
-
   };
 
   const handleOutPercentageChange = (e) => {
     const value = e.target.value;
     if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
       setOutPercentage(value);
-      setValue('OutPercentage', value);
+      setValue("OutPercentage", value);
     }
-
   };
 
-  const options = sizeOptions.map(option => ({ value: option, label: option }));
+  const options = sizeOptions.map((option) => ({
+    value: option,
+    label: option,
+  }));
 
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      minWidth: '150px',
+      minWidth: "150px",
     }),
     menuPortal: (provided) => ({
       ...provided,
@@ -638,9 +812,8 @@ const ManageOrder = () => {
     }),
   };
 
-
   const filteredSizeOptions = sizeOptions.filter(
-    option => !selectedSizes.includes(option.value)
+    (option) => !selectedSizes.includes(option.value)
   );
 
   // New component for dynamic table with size_name and textbox
@@ -693,7 +866,12 @@ const ManageOrder = () => {
       <div className="row justify-content-center">
         <div className="col-xxl-12">
           <div className="card">
-            <form className="needs-validation" onSubmit={handleSubmit(onSubmit)} noValidate="" id="invoice_form">
+            <form
+              className="needs-validation"
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate=""
+              id="invoice_form"
+            >
               <div className="card-body border-bottom border-bottom-dashed p-4">
                 <div className="row">
                   <div className="col-lg-4">
@@ -742,8 +920,8 @@ const ManageOrder = () => {
                           value={outWeight.toFixed(2)}
                           readOnly
                           required
-                          name="outweight"
-                          {...register('outweight')}
+                          name="outWeight"
+                          {...register("outWeight")}
                         />
                         <div className="invalid-feedback">
                           Please enter an out weight, Ex., 10.05
@@ -758,8 +936,10 @@ const ManageOrder = () => {
                           id="outRemarks"
                           placeholder="Out Remarks"
                           value={remarks}
-                          onChange={(e) => { setRemarks(e.target.value); setValue('remark', e.target.value) }}
-
+                          onChange={(e) => {
+                            setRemarks(e.target.value);
+                            setValue("remark", e.target.value);
+                          }}
                           required
                         />
                         <div className="invalid-feedback">
@@ -777,7 +957,7 @@ const ManageOrder = () => {
                           id="finalPurchaseWeight"
                           placeholder="Final Purchase Weight"
                           value={finalPurchaseWeight.toFixed(2)}
-                          {...register('finalpurchase')}
+                          {...register("finalPurchaseWeight")}
                           readOnly
                           required
                         />
@@ -796,7 +976,7 @@ const ManageOrder = () => {
                         className="form-control bg-light border-0"
                         id="partyName"
                         placeholder="Party Name"
-                        {...register('partyname')}
+                        {...register("partyname")}
                       />
                       <div className="invalid-feedback">
                         Please enter a PartyName
@@ -810,7 +990,7 @@ const ManageOrder = () => {
                         className="form-control bg-light border-0"
                         id="brokerName"
                         placeholder="Broker Name"
-                        {...register('brokername')}
+                        {...register("brokername")}
                         required=""
                       />
                       <div className="invalid-feedback">
@@ -842,10 +1022,9 @@ const ManageOrder = () => {
                                 selectedOption,
                                 1,
                                 document.getElementById("sellLimit").value
-                              )
-                              setValue('Discount 1', selectedOption);
-                            }
-                            }
+                              );
+                              setValue("Discount 1", selectedOption);
+                            }}
                             className="bg-light"
                             classNamePrefix="select"
                             data-discount="1"
@@ -863,8 +1042,6 @@ const ManageOrder = () => {
                           type="text"
                           className="form-control bg-light border-0"
                           id="discountamount1"
-
-
                           placeholder="Discount 1"
                           readOnly
                         />
@@ -885,10 +1062,9 @@ const ManageOrder = () => {
                                 selectedOption,
                                 2,
                                 document.getElementById("sellLimit").value
-                              )
-                              setValue('Discount 2', selectedOption);
-                            }
-                            }
+                              );
+                              setValue("Discount 2", selectedOption);
+                            }}
                             className="bg-light"
                             classNamePrefix="select"
                             data-discount="2"
@@ -906,8 +1082,6 @@ const ManageOrder = () => {
                           type="text"
                           className="form-control bg-light border-0"
                           id="discountamount2"
-
-
                           placeholder="Discount 2"
                           readOnly
                         />
@@ -921,11 +1095,96 @@ const ManageOrder = () => {
               </div>
 
               <div className="card-body p-4  border-bottom border-bottom-dashed">
+              <div className="row g-3">
+                  <div className="col-lg-3 col-sm-6">
+                    <label htmlFor="choices-color">Color</label>
+                    <div className="input-light">
+                      <div
+                        className="choices"
+                        data-type="select-one"
+                        tabIndex={0}
+                        role="listbox"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <div className="choices__inner">
+                          <select
+                            className="form-control bg-light border-0 choices__input"
+                            data-choices=""
+                            data-choices-search-false=""
+                            id="choices-color"
+                            required=""
+                            tabIndex={-1}
+                            data-choice="active"
+                            onChange={(selectedOption)=>{
+                                console.log("color", selectedOption);
+                                setValue("Color", selectedOption.target.value);
+
+                            }
+                                
+                            }
+                          >
+                            <option value="">Select Color</option>
+                            {colorOptions.map((color, index) => (
+                              <option key={color.label} value={color.label}>
+                                {color.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-3 col-sm-6">
+                    <label htmlFor="choices-shape">Shape</label>
+                    <div className="input-light">
+                      <div
+                        className="choices"
+                        data-type="select-one"
+                        tabIndex={0}
+                        role="listbox"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <div className="choices__inner">
+                          <select
+                            className="form-control bg-light border-0 choices__input"
+                            data-choices=""
+                            data-choices-search-false=""
+                            id="choices-shape"
+                            required=""
+                            tabIndex={-1}
+                            data-choice="active"
+                            onChange={(selectedOption)=>{
+                                
+                                setValue("Shape", selectedOption.target.value);
+
+                            }
+                                
+                            }
+                          >
+                            <option value="">Select Shape</option>
+                            {shapeOptions.map((shape, index) => (
+                              <option key={index} value={shape.label}>
+                                {shape.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <h4>Full Packate Table </h4>
                 <Container>
                   <Row>
                     <Col>
-                      <Button variant="primary" onClick={() => setShowTable(!showTable)}>
-                        {showTable ? 'Hide Table' : 'Show Table'}
+                      <Button
+                        variant="primary"
+                        onClick={() => setShowTable(!showTable)}
+                      >
+                        {showTable ? "Hide Table" : "Show Table"}
                       </Button>
                     </Col>
                   </Row>
@@ -938,7 +1197,7 @@ const ManageOrder = () => {
                               <thead className="table-light">
                                 <tr>
                                   <th>Size</th>
-                                  <th>Width</th>
+                                  <th>Weight</th>
                                   <th>Percentage</th>
                                   <th></th>
                                 </tr>
@@ -947,13 +1206,25 @@ const ManageOrder = () => {
                                 {fields.map((field, index) => (
                                   <tr key={field.id}>
                                     <td>
-                                      <div style={{ minWidth: '150px' }}>
+                                      <div style={{ minWidth: "150px" }}>
                                         <Select
-                                          value={sizeOptions1.find(option => option.value === watch(`rows[${index}].size`))}
-                                          onChange={selectedOption =>
-                                            handleChange(index, 'size', selectedOption ? selectedOption.value : '')
+                                          value={sizeOptions1.find(
+                                            (option) =>
+                                              option.value ===
+                                              watch(`rows[${index}].size`)
+                                          )}
+                                          onChange={(selectedOption) =>
+                                            handleChange(
+                                              index,
+                                              "size",
+                                              selectedOption
+                                                ? selectedOption.value
+                                                : ""
+                                            )
                                           }
-                                          options={getFilteredOptions(watch(`rows[${index}].size`))}
+                                          options={getFilteredOptions(
+                                            watch(`rows[${index}].size`)
+                                          )}
                                           placeholder="Select"
                                           classNamePrefix="select"
                                           styles={customStyles}
@@ -967,21 +1238,38 @@ const ManageOrder = () => {
                                         {...register(`rows[${index}].width`)}
                                         className="form-control bg-light"
                                         placeholder="Width"
-                                        onChange={e => handleChange(index, 'width', e.target.value)}
+                                        onChange={(e) =>
+                                          handleChange(
+                                            index,
+                                            "width",
+                                            e.target.value
+                                          )
+                                        }
                                       />
                                     </td>
                                     <td>
                                       <input
                                         type="text"
-                                        {...register(`rows[${index}].percentage`)}
+                                        {...register(
+                                          `rows[${index}].percentage`
+                                        )}
                                         className="form-control bg-light"
                                         placeholder="Percentage"
                                         // value={field.percentage}
-                                        onChange={e => handleChange(index, 'percentage', e.target.value)}
+                                        onChange={(e) =>
+                                          handleChange(
+                                            index,
+                                            "percentage",
+                                            e.target.value
+                                          )
+                                        }
                                       />
                                     </td>
                                     <td>
-                                      <Button variant="danger" onClick={() => removeRow1(index)}>
+                                      <Button
+                                        variant="danger"
+                                        onClick={() => removeRow1(index)}
+                                      >
                                         Remove Row
                                       </Button>
                                     </td>
@@ -990,167 +1278,19 @@ const ManageOrder = () => {
                               </tbody>
                             </table>
                           </div>
-                          <Button variant="success" onClick={addRow1} disabled={fields.length >= 5}>
+                          <Button
+                            variant="success"
+                            onClick={addRow1}
+                            disabled={fields.length >= 5}
+                          >
                             Add Row
                           </Button>
-
                         </Form>
                       </Col>
                     </Row>
                   )}
                 </Container>
-                <div className="row g-3">
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="invoicenoInput">Invoice No</label>
-                    <input
-                      type="text"
-                      className="form-control bg-light border-0"
-                      id="invoicenoInput"
-                      placeholder="Invoice No"
-                      defaultValue="#VL25000355"
-                      readOnly="readonly"
-                    />
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="choices-payment-status">Color</label>
-                    <div className="input-light">
-                      <div
-                        className="choices"
-                        data-type="select-one"
-                        tabIndex={0}
-                        role="listbox"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        <div className="choices__inner">
-                          <select
-                            className="form-control bg-light border-0 choices__input"
-                            data-choices=""
-                            data-choices-search-false=""
-                            id="choices-payment-status"
-                            required=""
-                            tabIndex={-1}
-                            data-choice="active"
-                          >
-                            <option value="">Select Color</option>
-                            {colorOptions.map((color, index) => (
-                              <option key={index} value={color.value}>
-                                {color.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="choices-payment-status">Shape</label>
-                    <div className="input-light">
-                      <div
-                        className="choices"
-                        data-type="select-one"
-                        tabIndex={0}
-                        role="listbox"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        <div className="choices__inner">
-                          <select
-                            className="form-control bg-light border-0 choices__input"
-                            data-choices=""
-                            data-choices-search-false=""
-                            id="choices-payment-status"
-                            required=""
-                            tabIndex={-1}
-                            data-choice="active"
-                          >
-                            <option value="">Select Shape</option>
-                            {shapeOptions.map((shape, index) => (
-                              <option key={index} value={shape.value}>
-                                {shape.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="invoicedateInput">Invoice Date</label>
-                    <input
-                      type="date"
-                      className="form-control bg-light border-0"
-                      id="invoicedateInput"
-                      data-provider="flatpickr"
-                      data-date-format="d M, Y"
-                      required=""
-                      defaultValue="2023-12-14"
-                    />
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="duedateInput">Due Date</label>
-                    <input
-                      type="date"
-                      className="form-control bg-light border-0"
-                      id="duedateInput"
-                      data-provider="flatpickr"
-                      data-date-format="d M, Y"
-                      required=""
-                      defaultValue="2023-12-14"
-                    />
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="size">Size</label>
-                    <div className="input-light">
-                      <Select
-                        options={sizeOptions}
-                        onChange={(selectedOption) => {
-                          handleSizeSelect(selectedOption, 0);
-                          setFormData({
-                            ...formData,
-                            sizeName: selectedOption ? selectedOption.value : '',
-                          });
-                        }}
-                        className="bg-light"
-                        classNamePrefix="select"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="costPrice">Cost Price</label>
-                    <input
-                      type="number"
-                      className="form-control bg-light border-0"
-                      id="costPrice"
-                      placeholder="Cost Price"
-                      value={formData.costPrice}
-                      onChange={(e) =>
-                        setFormData({ ...formData, costPrice: e.target.value })
-                      }
-                      required=""
-                    />
-                    <div className="invalid-feedback">
-                      Please enter Cost Price
-                    </div>
-                  </div>
-                  <div className="col-lg-3 col-sm-6">
-                    <label htmlFor="finalPrice">Final Price</label>
-                    <input
-                      type="number"
-                      className="form-control bg-light border-0"
-                      id="finalPrice"
-                      placeholder="Final Price"
-                      value={formData.finalPrice}
-                      onChange={(e) =>
-                        setFormData({ ...formData, finalPrice: e.target.value })
-                      }
-                      required=""
-                    />
-                    <div className="invalid-feedback">
-                      Please enter Final Price
-                    </div>
-                  </div>
-                </div>
+                
               </div>
               <div className="card-body p-4 border-bottom border-bottom-dashed">
                 <div className="row">
@@ -1185,11 +1325,27 @@ const ManageOrder = () => {
                                                 <Select
                                                   {...field}
                                                   options={sizeOptions}
-                                                  value={sizeOptions.find(option => option.value === field.value)}
-                                                  onChange={(selectedOption) => {
-                                                    field.onChange(selectedOption.value);
-                                                    handleSizeSelect(selectedOption, sectionIndex);
-                                                    setValue(`sections[${sectionIndex}].size`, selectedOption ? selectedOption.label : '');
+                                                  value={sizeOptions.find(
+                                                    (option) =>
+                                                      option.value ===
+                                                      field.value
+                                                  )}
+                                                  onChange={(
+                                                    selectedOption
+                                                  ) => {
+                                                    field.onChange(
+                                                      selectedOption.value
+                                                    );
+                                                    handleSizeSelect(
+                                                      selectedOption,
+                                                      sectionIndex
+                                                    );
+                                                    setValue(
+                                                      `sections[${sectionIndex}].size`,
+                                                      selectedOption
+                                                        ? selectedOption.label
+                                                        : ""
+                                                    );
                                                   }}
                                                   className="select bg-light"
                                                   classNamePrefix="select"
@@ -1203,7 +1359,14 @@ const ManageOrder = () => {
                                           <td></td>
                                           <td></td>
                                           <td>
-                                            <Button variant="danger" onClick={() => removeSection(sectionIndex)}>Remove Section</Button>
+                                            <Button
+                                              variant="danger"
+                                              onClick={() =>
+                                                removeSection(sectionIndex)
+                                              }
+                                            >
+                                              Remove Section
+                                            </Button>
                                           </td>
                                         </tr>
                                         {section.rows.map((row, rowIndex) => (
@@ -1216,14 +1379,38 @@ const ManageOrder = () => {
                                                 render={({ field }) => (
                                                   <Select
                                                     {...field}
-                                                    options={gradeOptions.filter(option => !section.selectedGrades.includes(option.value))}
-                                                    onChange={(selectedOption) => {
-                                                      field.onChange(selectedOption ? selectedOption.value : ""); // Trigger the field's onChange
-                                                      handleRowChange(sectionIndex, rowIndex, "grade", selectedOption ? selectedOption.value : ""); // Handle additional change logic
+                                                    options={gradeOptions.filter(
+                                                      (option) =>
+                                                        !section.selectedGrades.includes(
+                                                          option.value
+                                                        )
+                                                    )}
+                                                    onChange={(
+                                                      selectedOption
+                                                    ) => {
+                                                      field.onChange(
+                                                        selectedOption
+                                                          ? selectedOption.value
+                                                          : ""
+                                                      ); // Trigger the field's onChange
+                                                      handleRowChange(
+                                                        sectionIndex,
+                                                        rowIndex,
+                                                        "grade",
+                                                        selectedOption
+                                                          ? selectedOption.value
+                                                          : ""
+                                                      ); // Handle additional change logic
                                                     }}
                                                     className="select bg-light"
                                                     classNamePrefix="select"
-                                                    value={gradeOptions.find(option => option.value === field.value) || null} // Ensure value is correctly set
+                                                    value={
+                                                      gradeOptions.find(
+                                                        (option) =>
+                                                          option.value ===
+                                                          field.value
+                                                      ) || null
+                                                    } // Ensure value is correctly set
                                                   />
                                                 )}
                                               />
@@ -1240,8 +1427,15 @@ const ManageOrder = () => {
                                                     placeholder="CT"
                                                     {...field}
                                                     onChange={(e) => {
-                                                      field.onChange(e.target.value); // Update the form state
-                                                      handleRowChange(sectionIndex, rowIndex, "ct", e.target.value); // Call your custom change handler
+                                                      field.onChange(
+                                                        e.target.value
+                                                      ); // Update the form state
+                                                      handleRowChange(
+                                                        sectionIndex,
+                                                        rowIndex,
+                                                        "ct",
+                                                        e.target.value
+                                                      ); // Call your custom change handler
                                                     }}
                                                   />
                                                 )}
@@ -1259,8 +1453,15 @@ const ManageOrder = () => {
                                                     placeholder="RS"
                                                     {...field}
                                                     onChange={(e) => {
-                                                      field.onChange(e.target.value); // Update the form state
-                                                      handleRowChange(sectionIndex, rowIndex, "rs", e.target.value); // Call your custom change handler
+                                                      field.onChange(
+                                                        e.target.value
+                                                      ); // Update the form state
+                                                      handleRowChange(
+                                                        sectionIndex,
+                                                        rowIndex,
+                                                        "rs",
+                                                        e.target.value
+                                                      ); // Call your custom change handler
                                                     }}
                                                   />
                                                 )}
@@ -1277,8 +1478,15 @@ const ManageOrder = () => {
                                                     className="form-control bg-light"
                                                     placeholder="Amount"
                                                     onChange={(e) => {
-                                                      field.onChange(e.target.value); // Update form state
-                                                      handleRowChange(sectionIndex, rowIndex, "amount", e.target.value); // Custom handler
+                                                      field.onChange(
+                                                        e.target.value
+                                                      ); // Update form state
+                                                      handleRowChange(
+                                                        sectionIndex,
+                                                        rowIndex,
+                                                        "amount",
+                                                        e.target.value
+                                                      ); // Custom handler
                                                     }}
                                                     readOnly
                                                   />
@@ -1296,7 +1504,7 @@ const ManageOrder = () => {
                                                       className="form-control bg-light"
                                                       placeholder="Average"
                                                       {...field}
-                                                      value={field.value || ''}
+                                                      value={field.value || ""}
                                                       readOnly
                                                     />
                                                   )}
@@ -1304,20 +1512,45 @@ const ManageOrder = () => {
                                               </td>
                                             )}
                                             <td>
-                                              <Button variant="danger" onClick={() => removeRow(sectionIndex, rowIndex)}>Remove Row</Button>
+                                              <Button
+                                                variant="danger"
+                                                onClick={() =>
+                                                  removeRow(
+                                                    sectionIndex,
+                                                    rowIndex
+                                                  )
+                                                }
+                                              >
+                                                Remove Row
+                                              </Button>
                                             </td>
                                           </tr>
                                         ))}
                                         <tr>
-                                          <td colSpan="7" className="border-bottom border-bottom-dashed">
-                                            <Button variant="success" onClick={() => addRow(sectionIndex)}>Add Row</Button>
+                                          <td
+                                            colSpan="7"
+                                            className="border-bottom border-bottom-dashed"
+                                          >
+                                            <Button
+                                              variant="success"
+                                              onClick={() =>
+                                                addRow(sectionIndex)
+                                              }
+                                            >
+                                              Add Row
+                                            </Button>
                                           </td>
                                         </tr>
                                       </React.Fragment>
                                     ))}
                                     <tr>
                                       <td colSpan="7">
-                                        <Button variant="primary" onClick={addSection}>Add Section</Button>
+                                        <Button
+                                          variant="primary"
+                                          onClick={addSection}
+                                        >
+                                          Add Section
+                                        </Button>
                                       </td>
                                     </tr>
                                   </tbody>
@@ -1333,17 +1566,13 @@ const ManageOrder = () => {
               </div>
 
               {/* New table */}
-              <div style={{ display: 'flex' }}>
-                <table className="table table-borderless table-centered mb-0" style={{ marginLeft: 'auto', }}>
+              <div style={{ display: "flex" }}>
+                <table
+                  className="table table-borderless table-centered mb-0"
+                  style={{ marginLeft: "auto" }}
+                >
                   <tbody>
-
                     <tr className="border-top border-top-dashed mt-2">
-
-
-
-
-
-
                       <th scope="row">Grand Total</th>
                       <td style={{ width: 150 }}>
                         <input
@@ -1351,11 +1580,9 @@ const ManageOrder = () => {
                           className="form-control bg-light border-0"
                           id="cart-grandtotal"
                           placeholder="0.00"
-
                           readOnly="readOnly"
                         />
                       </td>
-
                     </tr>
                     <tr>
                       <th scope="row">Sample Weight </th>
@@ -1364,6 +1591,18 @@ const ManageOrder = () => {
                           type="text"
                           className="form-control bg-light border-0"
                           id="cart-ct"
+                          placeholder="0.00"
+                          readOnly="readOnly"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"> Total Average </th>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control bg-light border-0"
+                          id="total-avg"
                           placeholder="0.00"
                           readOnly="readOnly"
                         />
@@ -1409,7 +1648,7 @@ const ManageOrder = () => {
                       id="invoicenoInput"
                       placeholder="Seal 1"
                       defaultValue="0.00"
-                      {...register('Seal1')}
+                      {...register("Seal1")}
                       min={0}
                     />
                   </div>
@@ -1421,13 +1660,10 @@ const ManageOrder = () => {
                       id="invoicenoInput1"
                       placeholder="Seal 2"
                       defaultValue="0.00"
-                      {...register('Seal2')}
+                      {...register("Seal2")}
                       min={0}
                     />
-
                   </div>
-
-
                 </div>
               </div>
 
@@ -1441,10 +1677,9 @@ const ManageOrder = () => {
                         placeholder="Remarks"
                         value={formData.remarks}
                         onChange={(e) => {
-                          setFormData({ ...formData, remarks: e.target.value })
-                          setValue('lastremark', e.target.value);
-                        }
-                        }
+                          setFormData({ ...formData, remarks: e.target.value });
+                          setValue("lastremark", e.target.value);
+                        }}
                       />
 
                       <div className="invalid-feedback">

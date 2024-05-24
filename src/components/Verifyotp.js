@@ -16,6 +16,11 @@ const Verifyotp = () => {
             if (timeLeft > 0) {
                 setTimeLeft((prevTime) => prevTime - 1);
             }
+            else{
+                console.log("Timer has ended");
+                sessionStorage.setItem('otp','');
+                toast.error("timer is over so click resend otp");
+            }
         }, 1000);
 
         return () => clearTimeout(timer);
@@ -37,7 +42,7 @@ const Verifyotp = () => {
         const chekotp = sessionStorage.getItem('otp');
         console.log(chekotp);
 
-        if (userenterotp == chekotp) {
+        if (userenterotp === chekotp && userenterotp !="" && chekotp!="") {
             console.log("otp is match");
             navigate('/forget');
         }

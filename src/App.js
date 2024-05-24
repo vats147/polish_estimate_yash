@@ -16,6 +16,8 @@ import NewOrder from './components/neworder';
 // import ManageSize from './components/ManageSize';
 import DisplaySize from './components/displaysize';
 import ManageShape  from './components/displayShape';
+import DisplayOrder from "./components/displayorder";
+import FinalOrder from "./components/finalorder";
 
 function App() {
   console.log("app");
@@ -91,6 +93,8 @@ function App() {
               <Route path='/managesize' element={<DisplaySize/>}></Route> */}
               <Route path='/adduser' element={<Adduser/>}></Route>
               <Route path='/neworder' element={<NewOrder/>}></Route>
+              <Route path="/displayorder" element={<DisplayOrder />}></Route>
+              <Route path="/finalorder" element={<FinalOrder />}></Route>
             
 
 
