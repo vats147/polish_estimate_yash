@@ -175,7 +175,19 @@ const ShapeList = () => {
 
   return (
     <>
-      <ToastContainer autoClose={3000} onClose={() => toast.dismiss()} />
+      <ToastContainer
+                position="top-right"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+
+            />
       <div className="container-fluid d-flex flex-column" style={{ height: "650px", width: "100%" }}>
         <div className="d-flex justify-content-between mb-3">
           <input

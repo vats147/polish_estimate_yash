@@ -21,7 +21,7 @@ function App() {
   console.log("app");
 
   const [isLoggedIn, setIsLoggedIn] = useState();
-  const [chekadmin, setchekadmin] = useState();
+  const [chekadmin, setchekadmin] = useState('');
 
 
   function handleClick() {
@@ -30,6 +30,7 @@ function App() {
     const role = localStorage.getItem('role');
     if (role === 'emp' && localStorage.getItem('roled') === 'A00') {
       setIsLoggedIn(role);
+      setchekadmin('');
     }
     else if (role === 'Admin' && localStorage.getItem('roled') === 'A10') {
 
@@ -53,9 +54,10 @@ function App() {
 
       if (role === 'emp' && localStorage.getItem('roled') === 'A00') {
         setIsLoggedIn(role);
+        setchekadmin('');
       }
       else if (role === 'Admin' && localStorage.getItem('roled') === 'A10') {
-  
+
         setchekadmin('yesthis');
         setIsLoggedIn(role);
       }
@@ -71,37 +73,37 @@ function App() {
 
   return (
     <>
-    <Auths>
-      <Router>
+      <Auths>
+        <Router>
 
-
-      {isLoggedIn ? (<><div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+          {isLoggedIn ? (<><div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
             data-sidebar-position="fixed" data-header-position="fixed">
             <Navbars handellogout={handellogout} />
             <div className="body-wrapper">
-              <Routes>
+              <Routes>  
 
-                {chekadmin === 'yesthis' ? (<Route path='/adduser' element={<Adduser/>} />) : (<></>)}
-                
-              <Route path='/managecolor' element={<Managecolor/>}></Route>
-              <Route path='/adduser' element={<Adduser/>}></Route>
-              <Route path='/neworder' element={<NewOrder/>}></Route>
-              <Route path="/displayorder" element={<DisplayOrder />}></Route>
-              <Route path="/finalorder" element={<FinalOrder />}></Route>
-              <Route path="/managecolor" element={<Managecolor />}></Route>
-              <Route path="/managegrade" element={<ManageGrade />}></Route>
-              <Route path="/manageshape" element={<ManageShape />}></Route>
-              <Route path="/managesize" element={<DisplaySize />}></Route>
+                {chekadmin === 'yesthis' ? (<><Route path="/managecolor" element={<Managecolor />}></Route>
+                  <Route path="/managegrade" element={<ManageGrade />}></Route>
+                  <Route path="/manageshape" element={<ManageShape />}></Route>
+                  <Route path="/managesize" element={<DisplaySize />}></Route>
+                  <Route path='/adduser' element={<Adduser />} />
+                  <Route path='/managecolor' element={<Managecolor />}></Route></>) : (<></>)}
+
+                {/* <Route path='/adduser' element={<Adduser/>}></Route> */}
+                <Route path='/neworder' element={<NewOrder />}></Route>
+                <Route path="/displayorder" element={<DisplayOrder />}></Route>
+                <Route path="/finalorder" element={<FinalOrder />}></Route>
 
 
-              
+
+
 
               </Routes>
             </div>
           </div></>) : (
 
             <><Routes><Route path='/login' element={<Login onClickHandler={handleClick} />}  ></Route>
-              
+
               <Route path='/email' element={<Chekemail />}  ></Route>
               <Route path='/otp' element={<Verifyotp />}  ></Route>
               <Route path='/forget' element={<Forget />}  ></Route>
@@ -131,7 +133,7 @@ function App() {
 
 
 
-        {/* <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+          {/* <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
           data-sidebar-position="fixed" data-header-position="fixed">
           <Navbars />
 
@@ -149,7 +151,7 @@ function App() {
           </div>
         </div> */}
 
-      </Router>
+        </Router>
       </Auths>
     </>
   );
