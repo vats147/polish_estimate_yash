@@ -97,7 +97,7 @@ const Invoice = ({orderId}) => {
       justifyContent: "space-between",
       color: "#3E3E3E",
     },
-    titleContainer: { flexDirection: "row", marginTop: 24 },
+    titleContainer: { flexDirection: "row", marginTop: 10 },
     logo: { width: 90 },
     reportTitle: { fontSize: fontSize.reportTitle, textAlign: "center" },
     addressTitle: { fontSize: fontSize.addressTitle, fontStyle: "bold" },
@@ -199,8 +199,13 @@ const Invoice = ({orderId}) => {
     <View style={styles.titleContainer}>
       <View style={styles.spaceBetween}>
         {/* <Image style={styles.logo} src={logo} /> */}
-        <Text style={styles.reportTitle}> Xpress Enterprises
+        <View>
+        <Text style={styles.reportTitle}> J.Varshit
+        
         </Text>
+        <Text style={styles.addressTitle}> Rich Color Rere Heritage
+        </Text>
+        </View>
         <Text style={styles.address}>
           Created On:{" "}
           {tempData?.data[0]?.datetime
