@@ -11,58 +11,45 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-const colorSchema = yup.object().shape({
-  color_name: yup.string().required("Color name is required"),
+// Validation schema
+const shapeSchema = yup.object().shape({
+  shape_name: yup.string().required('Shape name is required'),
 });
 
-const ManageColor = ({ onClose, initialValue, mode }) => {
+const ManageShape = ({ onClose, initialValue, mode }) => {
   const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
-    resolver: yupResolver(colorSchema),
-    defaultValues: { color_name: initialValue ? initialValue.color_name : '' }
+    resolver: yupResolver(shapeSchema),
+    defaultValues: { shape_name: initialValue ? initialValue.shape_name : '' }
   });
 
   useEffect(() => {
     if (initialValue) {
-      reset({ color_name: initialValue.color_name });
+      reset({ shape_name: initialValue.shape_name });
     }
   }, [initialValue, reset]);
 
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('http://localhost:8080/updatecolor', { color_id: initialValue.color_id, ...data });
-        toast.success('Color updated successfully!');
+        const response = await axios.put('http://localhost:8080/updateshape', { shape_id: initialValue.shape_id, ...data });
+        toast.success('Shape updated successfully!');
       } else {
-        const response = await axios.post('http://localhost:8080/addcolor', data);
-        toast.success('Color added successfully!');
+        const response = await axios.post('http://localhost:8080/addshape', data);
+        toast.success('Shape added successfully!');
       }
       reset();
       onClose();
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data.message);
-        setError('color_name', {
+        setError('shape_name', {
           type: 'server',
           message: error.response.data.message
         });
       } else {
-        toast.error('Error adding/updating color. Please check your network connection.');
+        toast.error('Error adding/updating shape. Please check your network connection.');
       }
     }
-  };
-
-  const buttonStyle = {
-    display: 'inline-block',
-    width: '100%',
-    height: '43px',
-    backgroundColor: '#151111',
-    color: '#fff',
-    border: 'none',
-    cursor: 'pointer',
-    borderRadius: '0.8rem',
-    fontSize: '0.8rem',
-    marginBottom: '2rem',
-    transition: '0.3s',
   };
 
   return (
@@ -71,26 +58,26 @@ const ManageColor = ({ onClose, initialValue, mode }) => {
       <div className="container-fluid">
         <div className="card">
           <div className="card-body">
-            <h5 className="card-title fw-semibold mb-4">{mode === "edit" ? "Edit Color" : "Add Color"}</h5>
+            <h5 className="card-title fw-semibold mb-4">{mode === "edit" ? "Edit Shape" : "Add Shape"}</h5>
             <div className="card">
               <div className="card-body">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="mb-3">
-                    <label htmlFor="color_name" className="form-label">Color</label>
+                    <label htmlFor="shape_name" className="form-label">Shape</label>
                     <input
                       type="text"
-                      className={`form-control ${errors.color_name && 'is-invalid'}`}
-                      id="color_name"
-                      name="color_name"
-                      {...register('color_name')}
+                      className={`form-control ${errors.shape_name && 'is-invalid'}`}
+                      id="shape_name"
+                      name="shape_name"
+                      {...register('shape_name')}
                     />
-                    {errors.color_name && (
+                    {errors.shape_name && (
                       <div className="invalid-feedback">
-                        {errors.color_name.message}
+                        {errors.shape_name.message}
                       </div>
                     )}
                   </div>
-                  <button type="submit" style={buttonStyle} className="btn btn-primary">Submit</button>
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Submit</button>
                 </form>
               </div>
             </div>
@@ -101,93 +88,85 @@ const ManageColor = ({ onClose, initialValue, mode }) => {
   );
 };
 
-const ColorList = () => {
+const ShapeList = () => {
   const [rowData, setRowData] = useState([]);
   const [filterText, setFilterText] = useState("");
   const gridRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(null);
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedShape, setSelectedShape] = useState(null);
 
   useEffect(() => {
-    fetchColors();
+    fetchShapes();
   }, []);
 
-  const fetchColors = async () => {
+  const fetchShapes = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getallcolor");
+      const response = await axios.get("http://localhost:8080/getallshape");
       setRowData(response.data.data);
     } catch (error) {
-      toast.error("Error fetching colors. Please try again.");
+      toast.error("Error fetching shapes. Please try again.");
     }
   };
 
-  const deleteColor = async (id) => {
-    try {
-      setModalType("delete");
-      const color = rowData.find(color => color.color_id === id);
-      setSelectedColor(color);
-      setShowModal(true);
-    } catch (error) {
-      toast.error("Error deleting color. Please try again.");
-    }
+  const deleteShape = async (id) => {
+    setModalType("delete");
+    const shape = rowData.find(shape => shape.shape_id === id);
+    setSelectedShape(shape);
+    setShowModal(true);
   };
 
-  const editColor = async (id) => {
-    try {
-      const selectedColor = rowData.find(color => color.color_id === id);
-      setShowModal(true);
-      setModalType("edit");
-      setSelectedColor(selectedColor);
-    } catch (error) {
-      toast.error("Error editing color. Please try again.");
-    }
+  const editShape = async (id) => {
+    const selectedShape = rowData.find(shape => shape.shape_id === id);
+    setShowModal(true);
+    setModalType("edit");
+    setSelectedShape(selectedShape);
   };
 
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`http://localhost:8080/deletecolor`, {
-          data: { color_id: selectedColor.color_id },
+        await axios.delete(`http://localhost:8080/deleteshape`, {
+          data: { shape_id: selectedShape.shape_id },
         });
-        toast.success("Color deleted successfully!");
+        toast.success("Shape deleted successfully!");
       } catch (error) {
-        toast.error("Error deleting color. Please try again.");
+        toast.error("Error deleting shape. Please try again.");
       }
     }
     setShowModal(false);
-    fetchColors();
+    fetchShapes();
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setModalType(null);
-    setSelectedColor(null);
-    fetchColors();
+    setSelectedShape(null);
+    fetchShapes();
   };
 
   const handleSearch = (event) => {
     setFilterText(event.target.value);
     const filteredData = rowData.filter((item) =>
-      item.color_name.toLowerCase().includes(event.target.value.toLowerCase())
+      item.shape_name.toLowerCase().includes(event.target.value.toLowerCase())
     );
     gridRef.current.api.setRowData(filteredData);
   };
 
-  const handleAddColor = () => {
+  const handleAddShape = () => {
     setShowModal(true);
     setModalType("add");
-    setSelectedColor(null);
+    setSelectedShape(null);
   };
 
   const columnDefs = [
-    { field: "color_name", headerName: "Color", filter: true, flex: 1 },
+    { field: "shape_name", headerName: "Shape", filter: true, flex: 1, editable: true },
     {
       headerName: "Actions",
       cellRenderer: ({ data }) => (
         <div style={{ marginTop: "-2px" }}>
-          <button className="btn btn-outline-primary" style={{ marginRight: "10px" }} onClick={() => editColor(data.color_id)}>Edit</button>
-          <button className="btn btn-outline-danger" onClick={() => deleteColor(data.color_id)}>Delete</button>
+          <button className="btn btn-outline-primary" style={{ marginRight: "10px" }} onClick={() => editShape(data.shape_id)}>Edit</button>
+          <button className="btn btn-outline-danger" onClick={() => deleteShape(data.shape_id)}>Delete</button>
         </div>
       ),
       flex: 1,
@@ -206,7 +185,7 @@ const ColorList = () => {
             onChange={handleSearch}
             className="form-control"
           />
-          <button className="btn btn-primary" onClick={handleAddColor}>Add Color</button>
+          <button className="btn btn-primary" onClick={handleAddShape}>Add Shape</button>
         </div>
         <div className="ag-theme-quartz" style={{ flexGrow: 1 }}>
           <AgGridReact
@@ -215,6 +194,7 @@ const ColorList = () => {
             ref={gridRef}
             pagination={true}
             paginationPageSize={10}
+            onSelectionChanged={() => console.log(gridRef.current.api.getSelectedNodes())}
           />
         </div>
       </div>
@@ -222,14 +202,18 @@ const ColorList = () => {
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {modalType === "delete" ? "Delete Color" : modalType === "edit" ? "Edit Color" : "Add Color"}
+            {modalType === "delete" ? "Delete Shape" : modalType === "edit" ? "Edit Shape" : "Add Shape"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {modalType === "delete" ? (
-            <p>Are you sure you want to delete this color?</p>
+            <p>Are you sure you want to delete this shape?</p>
           ) : (
-            <ManageColor onClose={handleCloseModal} initialValue={selectedColor} mode={modalType} />
+            <ManageShape
+              onClose={handleCloseModal}
+              initialValue={selectedShape}
+              mode={modalType === "edit" ? "edit" : "add"}
+            />
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -241,4 +225,4 @@ const ColorList = () => {
   );
 };
 
-export default ColorList;
+export default ShapeList;

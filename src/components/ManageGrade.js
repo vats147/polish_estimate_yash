@@ -11,42 +11,42 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-const colorSchema = yup.object().shape({
-  color_name: yup.string().required("Color name is required"),
+const gradeSchema = yup.object().shape({
+  grade_name: yup.string().required("Grade name is required"),
 });
 
-const ManageColor = ({ onClose, initialValue, mode }) => {
+const ManageGrade = ({ onClose, initialValue, mode }) => {
   const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
-    resolver: yupResolver(colorSchema),
-    defaultValues: { color_name: initialValue ? initialValue.color_name : '' }
+    resolver: yupResolver(gradeSchema),
+    defaultValues: { grade_name: initialValue ? initialValue.grade_name : '' }
   });
 
   useEffect(() => {
     if (initialValue) {
-      reset({ color_name: initialValue.color_name });
+      reset({ grade_name: initialValue.grade_name });
     }
   }, [initialValue, reset]);
 
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('http://localhost:8080/updatecolor', { color_id: initialValue.color_id, ...data });
-        toast.success('Color updated successfully!');
+        const response = await axios.put('http://localhost:8080/updategrade', { grade_id: initialValue.grade_id, ...data });
+        toast.success('Grade updated successfully!');
       } else {
-        const response = await axios.post('http://localhost:8080/addcolor', data);
-        toast.success('Color added successfully!');
+        const response = await axios.post('http://localhost:8080/addgrade', data);
+        toast.success('Grade added successfully!');
       }
       reset();
       onClose();
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data.message);
-        setError('color_name', {
+        setError('grade_name', {
           type: 'server',
           message: error.response.data.message
         });
       } else {
-        toast.error('Error adding/updating color. Please check your network connection.');
+        toast.error('Error adding/updating grade. Please check your network connection.');
       }
     }
   };
@@ -71,22 +71,22 @@ const ManageColor = ({ onClose, initialValue, mode }) => {
       <div className="container-fluid">
         <div className="card">
           <div className="card-body">
-            <h5 className="card-title fw-semibold mb-4">{mode === "edit" ? "Edit Color" : "Add Color"}</h5>
+            <h5 className="card-title fw-semibold mb-4">{mode === "edit" ? "Edit Grade" : "Add Grade"}</h5>
             <div className="card">
               <div className="card-body">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="mb-3">
-                    <label htmlFor="color_name" className="form-label">Color</label>
+                    <label htmlFor="grade_name" className="form-label">Grade</label>
                     <input
                       type="text"
-                      className={`form-control ${errors.color_name && 'is-invalid'}`}
-                      id="color_name"
-                      name="color_name"
-                      {...register('color_name')}
+                      className={`form-control ${errors.grade_name && 'is-invalid'}`}
+                      id="grade_name"
+                      name="grade_name"
+                      {...register('grade_name')}
                     />
-                    {errors.color_name && (
+                    {errors.grade_name && (
                       <div className="invalid-feedback">
-                        {errors.color_name.message}
+                        {errors.grade_name.message}
                       </div>
                     )}
                   </div>
@@ -101,93 +101,93 @@ const ManageColor = ({ onClose, initialValue, mode }) => {
   );
 };
 
-const ColorList = () => {
+const GradeList = () => {
   const [rowData, setRowData] = useState([]);
   const [filterText, setFilterText] = useState("");
   const gridRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(null);
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedGrade, setSelectedGrade] = useState(null);
 
   useEffect(() => {
-    fetchColors();
+    fetchGrades();
   }, []);
 
-  const fetchColors = async () => {
+  const fetchGrades = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getallcolor");
+      const response = await axios.get("http://localhost:8080/getallgrade");
       setRowData(response.data.data);
     } catch (error) {
-      toast.error("Error fetching colors. Please try again.");
+      toast.error("Error fetching grades. Please try again.");
     }
   };
 
-  const deleteColor = async (id) => {
+  const deleteGrade = async (id) => {
     try {
       setModalType("delete");
-      const color = rowData.find(color => color.color_id === id);
-      setSelectedColor(color);
+      const grade = rowData.find(grade => grade.grade_id === id);
+      setSelectedGrade(grade);
       setShowModal(true);
     } catch (error) {
-      toast.error("Error deleting color. Please try again.");
+      toast.error("Error deleting grade. Please try again.");
     }
   };
 
-  const editColor = async (id) => {
+  const editGrade = async (id) => {
     try {
-      const selectedColor = rowData.find(color => color.color_id === id);
+      const selectedGrade = rowData.find(grade => grade.grade_id === id);
       setShowModal(true);
       setModalType("edit");
-      setSelectedColor(selectedColor);
+      setSelectedGrade(selectedGrade);
     } catch (error) {
-      toast.error("Error editing color. Please try again.");
+      toast.error("Error editing grade. Please try again.");
     }
   };
 
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`http://localhost:8080/deletecolor`, {
-          data: { color_id: selectedColor.color_id },
+        await axios.delete(`http://localhost:8080/deletegrade`, {
+          data: { grade_id: selectedGrade.grade_id },
         });
-        toast.success("Color deleted successfully!");
+        toast.success("Grade deleted successfully!");
       } catch (error) {
-        toast.error("Error deleting color. Please try again.");
+        toast.error("Error deleting grade. Please try again.");
       }
     }
     setShowModal(false);
-    fetchColors();
+    fetchGrades();
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setModalType(null);
-    setSelectedColor(null);
-    fetchColors();
+    setSelectedGrade(null);
+    fetchGrades();
   };
 
   const handleSearch = (event) => {
     setFilterText(event.target.value);
     const filteredData = rowData.filter((item) =>
-      item.color_name.toLowerCase().includes(event.target.value.toLowerCase())
+      item.grade_name.toLowerCase().includes(event.target.value.toLowerCase())
     );
     gridRef.current.api.setRowData(filteredData);
   };
 
-  const handleAddColor = () => {
+  const handleAddGrade = () => {
     setShowModal(true);
     setModalType("add");
-    setSelectedColor(null);
+    setSelectedGrade(null);
   };
 
   const columnDefs = [
-    { field: "color_name", headerName: "Color", filter: true, flex: 1 },
+    { field: "grade_name", headerName: "Grade", filter: true, flex: 1 },
     {
       headerName: "Actions",
       cellRenderer: ({ data }) => (
         <div style={{ marginTop: "-2px" }}>
-          <button className="btn btn-outline-primary" style={{ marginRight: "10px" }} onClick={() => editColor(data.color_id)}>Edit</button>
-          <button className="btn btn-outline-danger" onClick={() => deleteColor(data.color_id)}>Delete</button>
+          <button className="btn btn-outline-primary" style={{ marginRight: "10px" }} onClick={() => editGrade(data.grade_id)}>Edit</button>
+          <button className="btn btn-outline-danger" onClick={() => deleteGrade(data.grade_id)}>Delete</button>
         </div>
       ),
       flex: 1,
@@ -206,7 +206,7 @@ const ColorList = () => {
             onChange={handleSearch}
             className="form-control"
           />
-          <button className="btn btn-primary" onClick={handleAddColor}>Add Color</button>
+          <button className="btn btn-primary" onClick={handleAddGrade}>Add Grade</button>
         </div>
         <div className="ag-theme-quartz" style={{ flexGrow: 1 }}>
           <AgGridReact
@@ -222,14 +222,14 @@ const ColorList = () => {
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {modalType === "delete" ? "Delete Color" : modalType === "edit" ? "Edit Color" : "Add Color"}
+            {modalType === "delete" ? "Delete Grade" : modalType === "edit" ? "Edit Grade" : "Add Grade"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {modalType === "delete" ? (
-            <p>Are you sure you want to delete this color?</p>
+            <p>Are you sure you want to delete this grade?</p>
           ) : (
-            <ManageColor onClose={handleCloseModal} initialValue={selectedColor} mode={modalType} />
+            <ManageGrade onClose={handleCloseModal} initialValue={selectedGrade} mode={modalType} />
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -241,4 +241,4 @@ const ColorList = () => {
   );
 };
 
-export default ColorList;
+export default GradeList;

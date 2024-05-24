@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbars from './components/Navbar'
-import Managecolor from './components/Managecolor';
 import Login from './components/Login';
 import Adduser from './components/Adduser';
 import { Auths } from './components/Auths';
@@ -10,14 +9,13 @@ import Chekemail from './components/Chekemail';
 import Verifyotp from './components/Verifyotp';
 import { useEffect, useState } from "react";
 import Forget from './components/Forget';
-// import ManageGrade from './components/ManageGrade';
 import NewOrder from './components/neworder';
-// import ManageShape from './components/ManageShape';
-// import ManageSize from './components/ManageSize';
-import DisplaySize from './components/displaysize';
-import ManageShape  from './components/displayShape';
 import DisplayOrder from "./components/displayorder";
 import FinalOrder from "./components/finalorder";
+import Managecolor from "./components/Managecolor";
+import ManageGrade from "./components/ManageGrade";
+import ManageShape from "./components/ManageShape";
+import DisplaySize from "./components/ManageSize";
 
 function App() {
   console.log("app");
@@ -95,7 +93,10 @@ function App() {
               <Route path='/neworder' element={<NewOrder/>}></Route>
               <Route path="/displayorder" element={<DisplayOrder />}></Route>
               <Route path="/finalorder" element={<FinalOrder />}></Route>
-            
+              <Route path="/managecolor" element={<Managecolor />}></Route>
+              <Route path="/managegrade" element={<ManageGrade />}></Route>
+              <Route path="/manageshape" element={<ManageShape />}></Route>
+              <Route path="/managesize" element={<DisplaySize />}></Route>
 
 
               

@@ -98,28 +98,32 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <a
-                                        className="sidebar-link"
-                                        href="./ui-card.html"
-                                        aria-expanded="false"
-                                    >
-                                        <span>
-                                            <i className="ti ti-cards" />
-                                        </span>
-                                        <span className="hide-menu">Card</span>
-                                    </a>
+                                <NavLink to='/displayorder'>
+                                        <a
+                                            className="sidebar-link"
+
+                                            aria-expanded="false"
+                                        >
+                                            <span>
+                                                <i className="ti ti-user" />
+                                            </span>
+                                            <span className="hide-menu">invoice</span>
+                                        </a>
+                                    </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <a
-                                        className="sidebar-link"
-                                        href="./ui-forms.html"
-                                        aria-expanded="false"
-                                    >
-                                        <span>
-                                            <i className="ti ti-file-description" />
-                                        </span>
-                                        <span className="hide-menu">Forms</span>
-                                    </a>
+                                <NavLink to='/finalorder'>
+                                        <a
+                                            className="sidebar-link"
+
+                                            aria-expanded="false"
+                                        >
+                                            <span>
+                                                <i className="ti ti-user" />
+                                            </span>
+                                            <span className="hide-menu">order</span>
+                                        </a>
+                                    </NavLink>
                                 </li>
                                 <li className="sidebar-item">
                                     <a
