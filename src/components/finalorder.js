@@ -564,8 +564,8 @@ console.log(`Total CT: ${totalCT}`);
     const colorName = frontendData.Color || "";
     const shapeName = frontendData.Shape || "";
     const outPercentage = parseFloat(frontendData.OutPercentage) || 0;
-    const outWeight = parseFloat(frontendData.outWeight) || 0;
-    const finalPurchaseWeight = parseFloat(frontendData.finalPurchaseWeight) || 0;
+    const outWeight = parseFloat(frontendData.oWeight) || 0;
+    const finalPurchaseWeight = parseFloat(frontendData.pWeight) || 0;
     const remarks = frontendData.remark || "";
     const outRemarks = frontendData.lastremark || "";
     const seal = [parseInt(frontendData.Seal1) || 0, parseInt(frontendData.Seal2) || 0];
@@ -782,8 +782,10 @@ console.log(`Total CT: ${totalCT}`);
     const outPct = parseFloat(outPercentage) || 0;
     const calculatedOutWeight = (pkgWeight * outPct) / 100;
     setOutWeight(calculatedOutWeight);
+    setValue("oWeight",calculatedOutWeight);
     const calculatedFinalPurchaseWeight = pkgWeight - calculatedOutWeight;
     setFinalPurchaseWeight(calculatedFinalPurchaseWeight);
+    setValue("pWeight", calculatedFinalPurchaseWeight.toFixed(2));
   }, [packageWeight, outPercentage]);
 
   const handlePackageWeightChange = (e) => {
@@ -970,6 +972,7 @@ console.log(`Total CT: ${totalCT}`);
                           id="finalPurchaseWeight"
                           placeholder="Final Purchase Weight"
                           value={finalPurchaseWeight.toFixed(2)}
+                          name="finalPurchaseWeight"
                           {...register("finalPurchaseWeight")}
                           readOnly
                           required
