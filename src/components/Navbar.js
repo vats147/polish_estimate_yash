@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from './Auths';
@@ -14,39 +14,59 @@ const Navbar = ({ handellogout }) => {
         handellogout();
         navigate('/login');
     }
-
     const [sidebarType, setSidebarType] = useState('full');
     const [isMiniSidebar, setIsMiniSidebar] = useState(false);
-
+    const lastWidthRef = useRef(window.innerWidth);
+  
     useEffect(() => {
-        const updateSidebarType = () => {
-            const width = window.innerWidth > 0 ? window.innerWidth : window.screen.width;
-            if (width < 1199) {
-                setSidebarType('mini-sidebar');
-                setIsMiniSidebar(true);
-            } else {
-                setSidebarType('full');
-                setIsMiniSidebar(false);
-            }
+      const updateSidebarType = () => {
+        const currentWidth = window.innerWidth;
+        const widthThreshold = 1199;
+  
+        if (Math.abs(currentWidth - lastWidthRef.current) > 50) { // Check if the change in width is significant
+          if (currentWidth < widthThreshold) {
+            setSidebarType('mini-sidebar');
+            setIsMiniSidebar(true);
+          } else {
+            setSidebarType('full');
+            setIsMiniSidebar(false);
+          }
+          lastWidthRef.current = currentWidth; // Update the last known width
+        }
+      };
+  
+      // Debounce function to limit the rate of function calls
+      const debounce = (func, wait) => {
+        let timeout;
+        return (...args) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
         };
-
-        // Initial setting
-        updateSidebarType();
-
-        // Attach resize listener
-        window.addEventListener('resize', updateSidebarType);
-
-        // Cleanup listener on component unmount
-        return () => {
-            window.removeEventListener('resize', updateSidebarType);
-        };
+      };
+  
+      const debouncedUpdateSidebarType = debounce(updateSidebarType, 200);
+  
+      // Initial setting
+      updateSidebarType();
+  
+      // Attach resize listener
+      window.addEventListener('resize', debouncedUpdateSidebarType);
+  
+      // Cleanup listener on component unmount
+      return () => {
+        window.removeEventListener('resize', debouncedUpdateSidebarType);
+      };
     }, []);
-
+  
     const toggleSidebar = () => {
-        const newSidebarType = isMiniSidebar ? 'full' : 'mini-sidebar';
-        setIsMiniSidebar(!isMiniSidebar);
-        setSidebarType(newSidebarType);
+      const newSidebarType = isMiniSidebar ? 'full' : 'mini-sidebar';
+      setIsMiniSidebar(!isMiniSidebar);
+      setSidebarType(newSidebarType);
     };
+
+    const sidebar = () => {
+        setIsMiniSidebar(false);
+    }
 
 
     return (
@@ -94,7 +114,7 @@ const Navbar = ({ handellogout }) => {
 
 
                                 <li className="sidebar-item">
-                                    <NavLink to='/managecolor'>
+                                    <NavLink to='/managecolor' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
@@ -108,7 +128,7 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink to='/managegrade'>
+                                    <NavLink to='/managegrade' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
@@ -121,8 +141,8 @@ const Navbar = ({ handellogout }) => {
                                         </a>
                                     </NavLink>
                                 </li>
-                                <li className="sidebar-item">
-                                    <NavLink to='/manageshape'>
+                                <li className="sidebar-item" >
+                                    <NavLink to='/manageshape' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
@@ -136,7 +156,7 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink to='/managesize'>
+                                    <NavLink to='/managesize' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
@@ -149,8 +169,8 @@ const Navbar = ({ handellogout }) => {
                                         </a>
                                     </NavLink>
                                 </li>
-                                <li className="sidebar-item">
-                                    <NavLink to='/adduser'>
+                                <li className="sidebar-item" >
+                                    <NavLink to='/adduser' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
@@ -164,7 +184,7 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink to='/displayorder'>
+                                    <NavLink to='/displayorder' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
@@ -178,7 +198,7 @@ const Navbar = ({ handellogout }) => {
                                     </NavLink>
                                 </li>
                                 <li className="sidebar-item">
-                                    <NavLink to='/finalorder'>
+                                    <NavLink to='/finalorder' onClick={sidebar}>
                                         <a
                                             className="sidebar-link"
 
