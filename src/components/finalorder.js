@@ -1027,91 +1027,13 @@ console.log(`Total CT: ${totalCT}`);
                       </div>
                     </div>
 
-                    <div className="d-flex">
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">Discount 1 (%)</label>
-                        <div className="input-light">
-                          <Select
-                            options={discountOptions}
-                            onChange={(selectedOption) => {
-                              handleDiscountChange(
-                                selectedOption,
-                                1,
-                                document.getElementById("sellLimit").value
-                              );
-                              setValue("Discount 1", selectedOption);
-                            }}
-                            className="bg-light"
-                            classNamePrefix="select"
-                            data-discount="1"
-                          />
-                        </div>
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">
-                          Discount 1 Amount
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control bg-light border-0"
-                          id="discountamount1"
-                          placeholder="Discount 1"
-                          readOnly
-                        />
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="d-flex">
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">Discount 2 (%)</label>
-                        <div className="input-light">
-                          <Select
-                            options={discountOptions}
-                            onChange={(selectedOption) => {
-                              handleDiscountChange(
-                                selectedOption,
-                                2,
-                                document.getElementById("sellLimit").value
-                              );
-                              setValue("Discount 2", selectedOption);
-                            }}
-                            className="bg-light"
-                            classNamePrefix="select"
-                            data-discount="2"
-                          />
-                        </div>
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">
-                          Discount 2 Amount
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control bg-light border-0"
-                          id="discountamount2"
-                          placeholder="Discount 2"
-                          readOnly
-                        />
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
 
               <div className="card-body p-4  border-bottom border-bottom-dashed">
-              <div className="row g-3">
+              <div className="row g-3 border-bottom-dashed border-bottom p-2">
                   <div className="col-lg-3 col-sm-6">
                     <label htmlFor="choices-color">Color</label>
                     <div className="input-light">
@@ -1577,9 +1499,9 @@ console.log(`Total CT: ${totalCT}`);
                 </table>
               </div>
 
-              <div className="card-body p-4  border-bottom border-bottom-dashed borde-top border-top-dashed">
-                <div className="row g-3">
-                  <div className="col-lg-3 col-sm-6">
+              <div className="card-body p-4  border-bottom border-bottom-dashed border-top border-top-dashed">
+                <div className="row g-1">
+                  <div className="col-lg-2 col-sm-6">
                     <label htmlFor="invoicenoInput">Seal 1</label>
                     <input
                       type="number"
@@ -1591,7 +1513,7 @@ console.log(`Total CT: ${totalCT}`);
                       min={0}
                     />
                   </div>
-                  <div className="col-lg-3 col-sm-6">
+                  <div className="col-lg-2 col-sm-6">
                     <label htmlFor="choices-payment-status">Seal 2</label>
                     <input
                       type="number"
@@ -1603,7 +1525,93 @@ console.log(`Total CT: ${totalCT}`);
                       min={0}
                     />
                   </div>
+                  <div className="col-lg-4 col-sm-6">
+                  <div className="d-flex">
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">Discount 1(%)</label>
+                        <div className="input-light">
+                          <Select
+                            options={discountOptions}
+                            onChange={(selectedOption) => {
+                              handleDiscountChange(
+                                selectedOption,
+                                1,
+                                document.getElementById("total-avg").value
+                              );
+                              setValue("Discount 1", selectedOption);
+                            }}
+                            className="bg-light"
+                            classNamePrefix="select"
+                            data-discount="1"
+                          />
+                        </div>
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">
+                          Discount 1 Amount
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control bg-light border-0"
+                          id="discountamount1"
+                          placeholder="Discount 1"
+                          readOnly
+                        />
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                  <div className="col-lg-4 col-sm-6">
+                  <div className="d-flex">
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">Discount 2(%)</label>
+                        <div className="input-light">
+                          <Select
+                            options={discountOptions}
+                            onChange={(selectedOption) => {
+                              handleDiscountChange(
+                                selectedOption,
+                                2,
+                                document.getElementById("total-avg").value
+                              );
+                              setValue("Discount 2", selectedOption);
+                            }}
+                            className="bg-light"
+                            classNamePrefix="select"
+                            data-discount="2"
+                          />
+                        </div>
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">
+                          Discount 2 Amount
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control bg-light border-0"
+                          id="discountamount2"
+                          placeholder="Discount 2"
+                          readOnly
+                        />
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              
+
+                  
               </div>
 
               <div className="card-body p-4">
