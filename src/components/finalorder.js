@@ -1134,7 +1134,7 @@ console.log(`Total CT: ${totalCT}`);
                             data-choice="active"
                             onChange={(selectedOption)=>{
                                 console.log("color", selectedOption);
-                                setValue("Color", selectedOption.target.value);
+                                setValue("Color", selectedOption.target.value);   
 
                             }
                                 
@@ -1585,8 +1585,8 @@ console.log(`Total CT: ${totalCT}`);
                       type="number"
                       className="form-control bg-light border-0"
                       id="invoicenoInput"
-                      placeholder="Seal 1"
-                      defaultValue="0.00"
+                      placeholder="0.00"
+                      
                       {...register("Seal1")}
                       min={0}
                     />
@@ -1597,8 +1597,8 @@ console.log(`Total CT: ${totalCT}`);
                       type="number"
                       className="form-control bg-light border-0"
                       id="invoicenoInput1"
-                      placeholder="Seal 2"
-                      defaultValue="0.00"
+                      placeholder="0.00"
+                      
                       {...register("Seal2")}
                       min={0}
                     />
