@@ -237,11 +237,17 @@ const ManageOrder = () => {
   };
 
   const updateTotalCT = (value) => {
-    document.getElementById("cart-ct").value = value;
+    console.log("section", sections);
+
+    const totalCT = sections.reduce((sum, section) => sum + parseFloat(section.totalCT), 0);
+
+console.log(`Total CT: ${totalCT}`);
+
+    document.getElementById("cart-ct").value = totalCT;
     setValue("Sample Weight", value);
 
     let grandtotal=document.getElementById("cart-grandtotal").value? document.getElementById("cart-grandtotal").value: 1;
-    document.getElementById('total-avg').value= (parseFloat(grandtotal) / parseFloat(value)).toFixed(2);
+    document.getElementById('total-avg').value= (parseFloat(grandtotal) / parseFloat(totalCT)).toFixed(2);
     
     setValue("TotalAverage",document.getElementById('total-avg').value)
   };
