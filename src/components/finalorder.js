@@ -244,7 +244,7 @@ const ManageOrder = () => {
 console.log(`Total CT: ${totalCT}`);
 
     document.getElementById("cart-ct").value = totalCT;
-    setValue("Sample Weight", value);
+    setValue("Sample Weight", totalCT);
 
     let grandtotal=document.getElementById("cart-grandtotal").value? document.getElementById("cart-grandtotal").value: 1;
     document.getElementById('total-avg').value= (parseFloat(grandtotal) / parseFloat(totalCT)).toFixed(2);
