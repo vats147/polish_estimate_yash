@@ -60,7 +60,7 @@ const Verifyotp = () => {
 
         let emailotp = localStorage.getItem('emailotp');
 
-        axios.post('http://polish-estimate-backend.vercel.app/sendotp', {
+        axios.post('https://polish-estimate-backend.vercel.app/sendotp', {
             email: emailotp,
 
         }).then((res) => {

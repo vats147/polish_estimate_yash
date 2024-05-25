@@ -25,7 +25,7 @@ const Invoice = ({orderId}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://polish-estimate-backend.vercel.app/getoneorder", {
+        const response = await axios.get("https://polish-estimate-backend.vercel.app/getoneorder", {
           params: {
             orderId: orderId,
           },

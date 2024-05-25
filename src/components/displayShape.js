@@ -31,10 +31,10 @@ const ManageShape = ({ onClose, initialValue, mode }) => {
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('http://polish-estimate-backend.vercel.app/updateshape', { shape_id: initialValue.shape_id, ...data });
+        const response = await axios.put('https://polish-estimate-backend.vercel.app/updateshape', { shape_id: initialValue.shape_id, ...data });
         toast.success('Shape updated successfully!');
       } else {
-        const response = await axios.post('http://polish-estimate-backend.vercel.app/addshape', data);
+        const response = await axios.post('https://polish-estimate-backend.vercel.app/addshape', data);
         toast.success('Shape added successfully!');
       }
       reset();
@@ -102,7 +102,7 @@ const ShapeList = () => {
 
   const fetchShapes = async () => {
     try {
-      const response = await axios.get("http://polish-estimate-backend.vercel.app/getallshape");
+      const response = await axios.get("https://polish-estimate-backend.vercel.app/getallshape");
       setRowData(response.data.data);
     } catch (error) {
       toast.error("Error fetching shapes. Please try again.");
@@ -126,7 +126,7 @@ const ShapeList = () => {
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`http://polish-estimate-backend.vercel.app/deleteshape`, {
+        await axios.delete(`https://polish-estimate-backend.vercel.app/deleteshape`, {
           data: { shape_id: selectedShape.shape_id },
         });
         toast.success("Shape deleted successfully!");
