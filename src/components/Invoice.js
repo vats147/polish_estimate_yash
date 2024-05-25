@@ -612,7 +612,7 @@ const Invoice = ({orderId}) => {
             >
               
 
-              {tempData?.data[0]?.outPercentage ? tempData?.data[0]?.outPercentage :"N/A"} %
+              {tempData?.data[0]?.outPercentage ? tempData?.data[0]?.outPercentage :"0"} %
 
             </Text>
 
@@ -718,7 +718,7 @@ const Invoice = ({orderId}) => {
               }}
             >
               
-              {tempData?.data[0]?.finalPurchaseWeight ? tempData?.data[0]?.finalPurchaseWeight :"N/A"} ct
+              {tempData?.data[0]?.finalPurchaseWeight ? tempData?.data[0]?.finalPurchaseWeight :"0"} ct
 
             </Text>
 
