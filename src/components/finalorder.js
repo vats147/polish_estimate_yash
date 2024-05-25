@@ -237,11 +237,17 @@ const ManageOrder = () => {
   };
 
   const updateTotalCT = (value) => {
-    document.getElementById("cart-ct").value = value;
-    setValue("Sample Weight", value);
+    console.log("section", sections);
+
+    const totalCT = sections.reduce((sum, section) => sum + parseFloat(section.totalCT), 0);
+
+console.log(`Total CT: ${totalCT}`);
+
+    document.getElementById("cart-ct").value = totalCT;
+    setValue("Sample Weight", totalCT);
 
     let grandtotal=document.getElementById("cart-grandtotal").value? document.getElementById("cart-grandtotal").value: 1;
-    document.getElementById('total-avg').value= (parseFloat(grandtotal) / parseFloat(value)).toFixed(2);
+    document.getElementById('total-avg').value= (parseFloat(grandtotal) / parseFloat(totalCT)).toFixed(2);
     
     setValue("TotalAverage",document.getElementById('total-avg').value)
   };
@@ -558,8 +564,8 @@ const ManageOrder = () => {
     const colorName = frontendData.Color || "";
     const shapeName = frontendData.Shape || "";
     const outPercentage = parseFloat(frontendData.OutPercentage) || 0;
-    const outWeight = parseFloat(frontendData.outWeight) || 0;
-    const finalPurchaseWeight = parseFloat(frontendData.finalPurchaseWeight) || 0;
+    const outWeight = parseFloat(frontendData.oWeight) || 0;
+    const finalPurchaseWeight = parseFloat(frontendData.pWeight) || 0;
     const remarks = frontendData.remark || "";
     const outRemarks = frontendData.lastremark || "";
     const seal = [parseInt(frontendData.Seal1) || 0, parseInt(frontendData.Seal2) || 0];
@@ -776,8 +782,10 @@ const ManageOrder = () => {
     const outPct = parseFloat(outPercentage) || 0;
     const calculatedOutWeight = (pkgWeight * outPct) / 100;
     setOutWeight(calculatedOutWeight);
+    setValue("oWeight",calculatedOutWeight);
     const calculatedFinalPurchaseWeight = pkgWeight - calculatedOutWeight;
     setFinalPurchaseWeight(calculatedFinalPurchaseWeight);
+    setValue("pWeight", calculatedFinalPurchaseWeight.toFixed(2));
   }, [packageWeight, outPercentage]);
 
   const handlePackageWeightChange = (e) => {
@@ -1019,91 +1027,13 @@ const ManageOrder = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex">
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">Discount 1 (%)</label>
-                        <div className="input-light">
-                          <Select
-                            options={discountOptions}
-                            onChange={(selectedOption) => {
-                              handleDiscountChange(
-                                selectedOption,
-                                1,
-                                document.getElementById("sellLimit").value
-                              );
-                              setValue("Discount 1", selectedOption);
-                            }}
-                            className="bg-light"
-                            classNamePrefix="select"
-                            data-discount="1"
-                          />
-                        </div>
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">
-                          Discount 1 Amount
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control bg-light border-0"
-                          id="discountamount1"
-                          placeholder="Discount 1"
-                          readOnly
-                        />
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="d-flex">
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">Discount 2 (%)</label>
-                        <div className="input-light">
-                          <Select
-                            options={discountOptions}
-                            onChange={(selectedOption) => {
-                              handleDiscountChange(
-                                selectedOption,
-                                2,
-                                document.getElementById("sellLimit").value
-                              );
-                              setValue("Discount 2", selectedOption);
-                            }}
-                            className="bg-light"
-                            classNamePrefix="select"
-                            data-discount="2"
-                          />
-                        </div>
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                      <div className="mb-2">
-                        <label htmlFor="invoicenoInput">
-                          Discount 2 Amount
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control bg-light border-0"
-                          id="discountamount2"
-                          placeholder="Discount 2"
-                          readOnly
-                        />
-                        <div className="invalid-feedback">
-                          Please enter a valid Discount
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
 
               <div className="card-body p-4  border-bottom border-bottom-dashed">
-              <div className="row g-3">
+              <div className="row g-3 border-bottom-dashed border-bottom p-2">
                   <div className="col-lg-3 col-sm-6">
                     <label htmlFor="choices-color">Color</label>
                     <div className="input-light">
@@ -1126,7 +1056,7 @@ const ManageOrder = () => {
                             data-choice="active"
                             onChange={(selectedOption)=>{
                                 console.log("color", selectedOption);
-                                setValue("Color", selectedOption.target.value);
+                                setValue("Color", selectedOption.target.value);   
 
                             }
                                 
@@ -1569,33 +1499,119 @@ const ManageOrder = () => {
                 </table>
               </div>
 
-              <div className="card-body p-4  border-bottom border-bottom-dashed borde-top border-top-dashed">
-                <div className="row g-3">
-                  <div className="col-lg-3 col-sm-6">
+              <div className="card-body p-4  border-bottom border-bottom-dashed border-top border-top-dashed">
+                <div className="row g-1">
+                  <div className="col-lg-2 col-sm-6">
                     <label htmlFor="invoicenoInput">Seal 1</label>
                     <input
                       type="number"
                       className="form-control bg-light border-0"
                       id="invoicenoInput"
-                      placeholder="Seal 1"
-                      defaultValue="0.00"
+                      placeholder="0.00"
+                      
                       {...register("Seal1")}
                       min={0}
                     />
                   </div>
-                  <div className="col-lg-3 col-sm-6">
+                  <div className="col-lg-2 col-sm-6">
                     <label htmlFor="choices-payment-status">Seal 2</label>
                     <input
                       type="number"
                       className="form-control bg-light border-0"
                       id="invoicenoInput1"
-                      placeholder="Seal 2"
-                      defaultValue="0.00"
+                      placeholder="0.00"
+                      
                       {...register("Seal2")}
                       min={0}
                     />
                   </div>
+                  <div className="col-lg-4 col-sm-6">
+                  <div className="d-flex">
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">Discount 1(%)</label>
+                        <div className="input-light">
+                          <Select
+                            options={discountOptions}
+                            onChange={(selectedOption) => {
+                              handleDiscountChange(
+                                selectedOption,
+                                1,
+                                document.getElementById("total-avg").value
+                              );
+                              setValue("Discount 1", selectedOption);
+                            }}
+                            className="bg-light"
+                            classNamePrefix="select"
+                            data-discount="1"
+                          />
+                        </div>
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">
+                          Discount 1 Amount
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control bg-light border-0"
+                          id="discountamount1"
+                          placeholder="Discount 1"
+                          readOnly
+                        />
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                  <div className="col-lg-4 col-sm-6">
+                  <div className="d-flex">
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">Discount 2(%)</label>
+                        <div className="input-light">
+                          <Select
+                            options={discountOptions}
+                            onChange={(selectedOption) => {
+                              handleDiscountChange(
+                                selectedOption,
+                                2,
+                                document.getElementById("total-avg").value
+                              );
+                              setValue("Discount 2", selectedOption);
+                            }}
+                            className="bg-light"
+                            classNamePrefix="select"
+                            data-discount="2"
+                          />
+                        </div>
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                      <div className="mb-2">
+                        <label htmlFor="invoicenoInput">
+                          Discount 2 Amount
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control bg-light border-0"
+                          id="discountamount2"
+                          placeholder="Discount 2"
+                          readOnly
+                        />
+                        <div className="invalid-feedback">
+                          Please enter a valid Discount
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              
+
+                  
               </div>
 
               <div className="card-body p-4">
@@ -1622,9 +1638,9 @@ const ManageOrder = () => {
                     <Button variant="primary" type="submit">
                       Save Invoice
                     </Button>
-                    <button type="button" onClick={handlePrintFormData}>
+                    {/* <button type="button" onClick={handlePrintFormData}>
                       Print Form Data
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
