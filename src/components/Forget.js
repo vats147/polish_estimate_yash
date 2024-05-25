@@ -37,7 +37,7 @@ const Forget = () => {
         console.log(session_email, "===");
         if (session_email) {
 
-            axios.post('http://localhost:8080/fogotpassword', {
+            axios.post('http://polish-estimate-backend.vercel.app/fogotpassword', {
                 email: session_email,
                 password: data.password,
                 chpassword: data.confirm_password

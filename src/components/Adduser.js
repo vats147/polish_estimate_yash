@@ -36,7 +36,7 @@ const Adduser = () => {
     const onSubmit = (data,event)=>{
         console.log(data);
         
-        axios.post('http://localhost:8080/adduser', {
+        axios.post('http://polish-estimate-backend.vercel.app/adduser', {
             name:data.name,
             number:data.phone,
             Address:data.address,

@@ -49,7 +49,7 @@ const ManageOrder = () => {
 
   useEffect(() => {
     // Fetch data for size and grade options
-    axios.get("http://localhost:8080/getallsizes")
+    axios.get("http://polish-estimate-backend.vercel.app/getallsizes")
       .then((response) => {
         const sizes = response.data.data.map((size) => ({
           value: size.size_id,
@@ -67,7 +67,7 @@ const ManageOrder = () => {
         console.error("There was an error fetching the sizes!", error);
       });
 
-    axios.get("http://localhost:8080/getallgrade")
+    axios.get("http://polish-estimate-backend.vercel.app/getallgrade")
       .then((response) => {
         const options = response.data.data.map((grade) => ({
           value: grade.grade_name,
