@@ -30,10 +30,10 @@ const ManageColor = ({ onClose, initialValue, mode }) => {
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('http://localhost:8080/updatecolor', { color_id: initialValue.color_id, ...data });
+        const response = await axios.put('http://polish-estimate-backend.vercel.app/updatecolor', { color_id: initialValue.color_id, ...data });
         toast.success('Color updated successfully!');
       } else {
-        const response = await axios.post('http://localhost:8080/addcolor', data);
+        const response = await axios.post('http://polish-estimate-backend.vercel.app/addcolor', data);
         toast.success('Color added successfully!');
       }
       reset();
@@ -115,7 +115,7 @@ const ColorList = () => {
 
   const fetchColors = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getallcolor");
+      const response = await axios.get("http://polish-estimate-backend.vercel.app/getallcolor");
       setRowData(response.data.data);
     } catch (error) {
       toast.error("Error fetching colors. Please try again.");
@@ -147,7 +147,7 @@ const ColorList = () => {
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`http://localhost:8080/deletecolor`, {
+        await axios.delete(`http://polish-estimate-backend.vercel.app/deletecolor`, {
           data: { color_id: selectedColor.color_id },
         });
         toast.success("Color deleted successfully!");

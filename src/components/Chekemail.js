@@ -32,7 +32,7 @@ const Chekemail = () => {
         console.log(data);
 
         localStorage.setItem('emailotp', data.email);
-        axios.post('http://localhost:8080/sendotp', {
+        axios.post('http://polish-estimate-backend.vercel.app/sendotp', {
             email: data.email,
 
         }).then((res) => {

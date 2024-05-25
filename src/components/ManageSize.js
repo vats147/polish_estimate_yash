@@ -27,11 +27,11 @@ const ManageSize = ({ onClose, initialValue, mode }) => {
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('http://localhost:8080/updatesize', { size_id: initialValue.size_id, ...data });
+        const response = await axios.put('http://polish-estimate-backend.vercel.app/updatesize', { size_id: initialValue.size_id, ...data });
         console.log(response.data);
         toast.success('Size updated successfully!');
       } else {
-        const response = await axios.post('http://localhost:8080/addsize', data);
+        const response = await axios.post('http://polish-estimate-backend.vercel.app/addsize', data);
         console.log(response.data);
         toast.success('Size added successfully!');
       }
@@ -119,7 +119,7 @@ const SizeList = () => {
 
   const fetchSizes = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getallsizes");
+      const response = await axios.get("http://polish-estimate-backend.vercel.app/getallsizes");
       setRowData(response.data.data);
       console.log(response.data.data);
     } catch (error) {
@@ -158,7 +158,7 @@ const SizeList = () => {
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`http://localhost:8080/deletesize`, {
+        await axios.delete(`http://polish-estimate-backend.vercel.app/deletesize`, {
           data: { size_id: selectedSize.size_id },
         });
         console.log("Deleted");
