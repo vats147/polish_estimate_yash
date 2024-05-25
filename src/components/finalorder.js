@@ -1630,9 +1630,9 @@ console.log(`Total CT: ${totalCT}`);
                     <Button variant="primary" type="submit">
                       Save Invoice
                     </Button>
-                    <button type="button" onClick={handlePrintFormData}>
+                    {/* <button type="button" onClick={handlePrintFormData}>
                       Print Form Data
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
