@@ -964,6 +964,7 @@ const ManageOrder = () => {
                           id="finalPurchaseWeight"
                           placeholder="Final Purchase Weight"
                           value={finalPurchaseWeight.toFixed(2)}
+                          name="finalPurchaseWeight"
                           {...register("finalPurchaseWeight")}
                           readOnly
                           required
