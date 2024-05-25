@@ -832,7 +832,7 @@ const Invoice = ({orderId}) => {
             <Text style={{ flex: 1, textAlign: "center" }}>
               {calculateTotal()}
               {
-                parseFloat(tempData?.data[0]?.sellLimit) - parseFloat(parseFloat(tempData?.data[0]?.sellLimit) * parseFloat(tempData?.data[0]?.discount1percentage) / 100).toFixed(2)
+                parseFloat(tempData?.data[0]?.averageTotal) - parseFloat(parseFloat(tempData?.data[0]?.averageTotal) * parseFloat(tempData?.data[0]?.discount1percentage) / 100).toFixed(2)
               }
             </Text>
           </View>
@@ -846,7 +846,7 @@ const Invoice = ({orderId}) => {
             <Text style={{ flex: 1, textAlign: "center" }}>
             {calculateTotal()}
               {
-                parseFloat(tempData?.data[0]?.sellLimit) - parseFloat(parseFloat(tempData?.data[0]?.sellLimit) * parseFloat(tempData?.data[0]?.discount2percentage) / 100).toFixed(2)
+                parseFloat(tempData?.data[0]?.averageTotal) - parseFloat(parseFloat(tempData?.data[0]?.averageTotal) * parseFloat(tempData?.data[0]?.discount2percentage) / 100).toFixed(2)
               }
             </Text>
           </View>
