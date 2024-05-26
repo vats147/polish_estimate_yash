@@ -161,9 +161,9 @@ const Login = ({ onClickHandler }) => {
                                                         Remember this Device
                                                     </label>
                                                 </div> */}
-                                                <NavLink to="/email"><a className="text-primary fw-bold" href="">
+                                                {/* <NavLink to="/email"><a className="text-primary fw-bold" href="">
                                                     Forgot Password?
-                                                </a></NavLink>
+                                                </a></NavLink> */}
                                             </div>
                                             <button type="submit" className="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" disabled={loading}>
                                                 {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Submit"}
