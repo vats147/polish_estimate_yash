@@ -286,11 +286,11 @@ const Navbar = ({ handellogout }) => {
                             >
                                 <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                                     <a
-                                        href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/"
-                                        target="_blank"
+                                        href="https://jvarshit.vercel.app/neworder"
+                                        
                                         className="btn btn-primary"
                                     >
-                                        Download Free
+                                        Add order
                                     </a>
                                     <li className="nav-item dropdown">
                                         <a
