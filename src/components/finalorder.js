@@ -577,7 +577,7 @@ console.log(`Total CT: ${totalCT}`);
     const finalPrice = costPrice - discount1Amount - discount2Amount;
     const averageTotal = parseFloat(frontendData.TotalAverage) || 0;
     const datetime = new Date().toISOString(); // Assuming current date and time
-    const createdBy = "currentUser"; // Replace with actual user info
+    const createdBy = localStorage.getItem("username")? localStorage.getItem("username"):  "currentUser"; // Replace with actual user info
     const modifiedBy = "currentUser"; // Replace with actual user info
     const createdDateTime = new Date().toISOString();
     const lastModifiedDateTime = new Date().toISOString();
