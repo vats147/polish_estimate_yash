@@ -1,22 +1,23 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react';
 import { useAuth } from './Auths';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { loginschema } from '../schema/login';
-import axios from 'axios'
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Import CSS for toastify
+import Spinner from 'react-bootstrap/Spinner';   // Import Spinner component
 
 const Login = ({ onClickHandler }) => {
-
     const auth = useAuth();
-    const [open, setOpen] = React.useState(false);
-    const [erropen, errsetOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [erropen, errsetOpen] = useState(false);
     const [username, setUsername] = useState('');
+    const [loading, setLoading] = useState(false);  // Loading state
 
-    console.log("open", open)
+    console.log("open", open);
 
     const navigate = useNavigate();
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -24,57 +25,48 @@ const Login = ({ onClickHandler }) => {
         defaultValues: { email: '', password: '' }
     });
 
-
-    const onSubmit = (data, event) => {
+    const onSubmit = async (data, event) => {
+        setLoading(true);  // Set loading to true
         console.log("reg");
         console.log(data);
 
-        axios.post('https://polish-estimate-backend.vercel.app/login', {
-            email: data.email,
-            password: data.password,
-        }).then((res) => {
+        try {
+            const res = await axios.post('https://polish-estimate-backend.vercel.app/login', {
+                email: data.email,
+                password: data.password,
+            });
 
             console.log("success", res.data[0]);
 
             if (res.data[0].role === "Admin" && res.data[0].user_status === "A10") {
                 localStorage.setItem('roled', res.data[0].user_status);
                 localStorage.setItem('useremail', res.data[0].user_email);
-                localStorage.setItem('role', res.data[0].role)
+                localStorage.setItem('role', res.data[0].role);
                 auth.login(res.data[0]._id);
                 console.log("admin");
-                setOpen(true)
+                setOpen(true);
                 onClickHandler();
-                navigate('/managecolor')
-            
+                navigate('/managecolor');
             } else {
-                console.log("success")
+                console.log("success");
                 console.log("emp");
                 localStorage.setItem('roled', res.data[0].user_status);
                 localStorage.setItem('useremail', res.data[0].user_email);
-                localStorage.setItem('role', res.data[0].role)
+                localStorage.setItem('role', res.data[0].role);
                 auth.login(res.data[0]._id);
                 onClickHandler();
-                navigate('/managecolor')
+                navigate('/managecolor');
             }
-
-
-
-
-
-        }).catch((error) => {
-            console.log("error", error, "this is actch");
-
+        } catch (error) {
+            console.log("error", error, "this is catch");
             event.preventDefault();
             toast.error("Please enter Valid username and password");
-
-        });
+        } finally {
+            setLoading(false);  // Set loading to false
+        }
 
         // reset();
     };
-
-
-
-
 
     return (
         <>
@@ -89,7 +81,6 @@ const Login = ({ onClickHandler }) => {
                 draggable
                 pauseOnHover
                 theme="light"
-
             />
 
             <div
@@ -121,7 +112,7 @@ const Login = ({ onClickHandler }) => {
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <div className="mb-3">
                                                 <label htmlFor="exampleInputEmail1" className="form-label">
-                                                    Username
+                                                    Email
                                                 </label>
                                                 <input
                                                     type="email"
@@ -155,7 +146,7 @@ const Login = ({ onClickHandler }) => {
                                                 </div>)}
                                             </div>
                                             <div className="d-flex align-items-center justify-content-between mb-4">
-                                                <div className="form-check">
+                                                {/* <div className="form-check">
                                                     <input
                                                         className="form-check-input primary"
                                                         type="checkbox"
@@ -167,17 +158,16 @@ const Login = ({ onClickHandler }) => {
                                                         className="form-check-label text-dark"
                                                         htmlFor="flexCheckChecked"
                                                     >
-                                                        Remeber this Device
+                                                        Remember this Device
                                                     </label>
-                                                </div>
-                                                <NavLink to="/email"> <a className="text-primary fw-bold" href="">
-                                                    Forgot Password ?
-                                                </a></NavLink>
+                                                </div> */}
+                                                {/* <NavLink to="/email"><a className="text-primary fw-bold" href="">
+                                                    Forgot Password?
+                                                </a></NavLink> */}
                                             </div>
-                                            <button type="submit" className="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
-                                                Submit
+                                            <button type="submit" className="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" disabled={loading}>
+                                                {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Submit"}
                                             </button>
-
                                         </form>
                                     </div>
                                 </div>
@@ -187,8 +177,7 @@ const Login = ({ onClickHandler }) => {
                 </div>
             </div>
         </>
+    );
+};
 
-    )
-}
-
-export default Login
+export default Login;
