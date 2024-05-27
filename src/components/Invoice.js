@@ -200,10 +200,10 @@ const Invoice = ({orderId}) => {
       <View style={styles.spaceBetween}>
         {/* <Image style={styles.logo} src={logo} /> */}
         <View>
-        <Text style={styles.reportTitle}> J.Varshit
+        <Text style={styles.reportTitle}> Your company name 
         
         </Text>
-        <Text style={styles.addressTitle}> Rich Color Rere Heritage
+        <Text style={styles.addressTitle}> Your Company slogan 
         </Text>
         </View>
         <Text style={styles.address}>
