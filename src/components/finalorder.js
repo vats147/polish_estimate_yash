@@ -1175,7 +1175,7 @@ console.log(`Total CT: ${totalCT}`);
                                         type="text"
                                         {...register(`rows[${index}].width`)}
                                         className="form-control bg-light"
-                                        placeholder="Width"
+                                        placeholder="Weight"
                                         onChange={(e) =>
                                           handleChange(
                                             index,
