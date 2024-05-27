@@ -42,6 +42,7 @@ const Login = ({ onClickHandler }) => {
                 localStorage.setItem('roled', res.data[0].user_status);
                 localStorage.setItem('useremail', res.data[0].user_email);
                 localStorage.setItem('role', res.data[0].role);
+                localStorage.setItem('username',res.data[0].user_full_name);
                 auth.login(res.data[0]._id);
                 console.log("admin");
                 setOpen(true);
