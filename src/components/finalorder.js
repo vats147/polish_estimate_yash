@@ -51,7 +51,7 @@ const ManageOrder = () => {
   useEffect(() => {
     // Fetch data for size and grade options
     axios
-      .get("https://polish-estimate-backend.vercel.app/getallsizes")
+      .get("https://diamonddemo-backend.vercel.app/getallsizes")
       .then((response) => {
         const sizes = response.data.data.map((size) => ({
           value: size.size_id,
@@ -72,7 +72,7 @@ const ManageOrder = () => {
       });
 
     axios
-      .get("https://polish-estimate-backend.vercel.app/getallgrade")
+      .get("https://diamonddemo-backend.vercel.app/getallgrade")
       .then((response) => {
         const options = response.data.data.map((grade) => ({
           value: grade.grade_name,
@@ -87,7 +87,7 @@ const ManageOrder = () => {
 
     // Fetch data for color options
     axios
-      .get("https://polish-estimate-backend.vercel.app/getallcolor")
+      .get("https://diamonddemo-backend.vercel.app/getallcolor")
       .then((response) => {
         const colors = response.data.data.map((color) => ({
           value: color.color_id,
@@ -101,7 +101,7 @@ const ManageOrder = () => {
 
     // Fetch data for shape options
     axios
-      .get("https://polish-estimate-backend.vercel.app/getallshape")
+      .get("https://diamonddemo-backend.vercel.app/getallshape")
       .then((response) => {
         const shapes = response.data.data.map((shape) => ({
           value: shape.shape_id,
@@ -482,7 +482,7 @@ console.log(`Total CT: ${totalCT}`);
     let submitdata = transformDataForBackend(data);
     console.log(submitdata);
 
-    axios.post("https://polish-estimate-backend.vercel.app/addorder", submitdata).then((response) => {
+    axios.post("https://diamonddemo-backend.vercel.app/addorder", submitdata).then((response) => {
         console.log(response);
         if (response.data.success ) {
             toast.success("Invoice added successfully!");

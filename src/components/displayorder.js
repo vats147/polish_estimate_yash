@@ -33,10 +33,10 @@ const ManageColor = ({ onClose, initialValue, mode }) => {
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('https://polish-estimate-backend.vercel.app/updatecolor', { orderId: initialValue.orderId, ...data });
+        const response = await axios.put('https://diamonddemo-backend.vercel.app/updatecolor', { orderId: initialValue.orderId, ...data });
         toast.success('Color updated successfully!');
       } else {
-        const response = await axios.post('https://polish-estimate-backend.vercel.app/addcolor', data);
+        const response = await axios.post('https://diamonddemo-backend.vercel.app/addcolor', data);
         toast.success('Color added successfully!');
       }
       reset();
@@ -118,7 +118,7 @@ const ColorList = () => {
 
   const fetchColors = async () => {
     try {
-      const response = await axios.get("https://polish-estimate-backend.vercel.app/getallorder");
+      const response = await axios.get("https://diamonddemo-backend.vercel.app/getallorder");
       setRowData(response.data.data);
       console.log(response.data.data)
     } catch (error) {
@@ -151,7 +151,7 @@ const ColorList = () => {
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`https://polish-estimate-backend.vercel.app/deletecolor`, {
+        await axios.delete(`https://diamonddemo-backend.vercel.app/deletecolor`, {
           data: { orderId: selectedColor.orderId },
         });
         toast.success("Color deleted successfully!");

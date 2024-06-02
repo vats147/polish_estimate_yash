@@ -31,7 +31,7 @@ const Login = ({ onClickHandler }) => {
         console.log(data);
 
         try {
-            const res = await axios.post('https://polish-estimate-backend.vercel.app/login', {
+            const res = await axios.post('https://diamonddemo-backend.vercel.app/login', {
                 email: data.email,
                 password: data.password,
             });

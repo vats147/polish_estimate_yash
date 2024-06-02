@@ -30,10 +30,10 @@ const ManageGrade = ({ onClose, initialValue, mode }) => {
   const onSubmit = async (data) => {
     try {
       if (mode === "edit") {
-        const response = await axios.put('https://polish-estimate-backend.vercel.app/updategrade', { grade_id: initialValue.grade_id, ...data });
+        const response = await axios.put('https://diamonddemo-backend.vercel.app/updategrade', { grade_id: initialValue.grade_id, ...data });
         toast.success('Grade updated successfully!');
       } else {
-        const response = await axios.post('https://polish-estimate-backend.vercel.app/addgrade', data);
+        const response = await axios.post('https://diamonddemo-backend.vercel.app/addgrade', data);
         toast.success('Grade added successfully!');
       }
       reset();
@@ -115,7 +115,7 @@ const GradeList = () => {
 
   const fetchGrades = async () => {
     try {
-      const response = await axios.get("https://polish-estimate-backend.vercel.app/getallgrade");
+      const response = await axios.get("https://diamonddemo-backend.vercel.app/getallgrade");
       setRowData(response.data.data);
     } catch (error) {
       toast.error("Error fetching grades. Please try again.");
@@ -147,7 +147,7 @@ const GradeList = () => {
   const handleConfirmAction = async () => {
     if (modalType === "delete") {
       try {
-        await axios.delete(`https://polish-estimate-backend.vercel.app/deletegrade`, {
+        await axios.delete(`https://diamonddemo-backend.vercel.app/deletegrade`, {
           data: { grade_id: selectedGrade.grade_id },
         });
         toast.success("Grade deleted successfully!");

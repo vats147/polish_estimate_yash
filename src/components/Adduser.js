@@ -36,7 +36,7 @@ const Adduser = () => {
     const onSubmit = (data,event)=>{
         console.log(data);
         
-        axios.post('https://polish-estimate-backend.vercel.app/adduser', {
+        axios.post('https://diamonddemo-backend.vercel.app/adduser', {
             name:data.name,
             number:data.phone,
             Address:data.address,
